@@ -1,10 +1,10 @@
-package cl.pcbuild.categoryservice;
+package cl.pcbuildstore.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CategoryServiceApplicationTests {
+class UserServiceApplicationTests {
 
     @Test
     void contextLoads() {

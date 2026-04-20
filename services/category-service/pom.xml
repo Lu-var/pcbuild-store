@@ -8,8 +8,8 @@
         <version>4.0.5</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>cl.pcbuild</groupId>
-    <artifactId>category-service</artifactId>
+	<groupId>cl.pcbuildstore</groupId>
+	<artifactId>category</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>category-service</name>
     <description>category-service</description>
