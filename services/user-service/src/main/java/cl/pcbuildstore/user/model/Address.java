@@ -12,24 +12,19 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String calle;
-    private String codigoPostal;
-    private Boolean esPrincipal;
+    private String street;
+    private String postalCode;
+    private Boolean isPrimary;
 
-    //FKs de clases/entidad
-    //Varias direcciones pueden tener un mismo usuario
-    //Direcciones corresponden a un usuario único
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    //Varias direcciones pueden tener la misma region
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
 
-    //Varias direcciones pueden tener la misma ciudad
     @ManyToOne
-    @JoinColumn(name = "ciudad_id")
-    private Ciudad ciudad;
+    @JoinColumn(name = "city_id")
+    private City city;
 }

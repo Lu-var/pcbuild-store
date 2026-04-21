@@ -13,15 +13,14 @@ import java.util.List;
 @Setter
 public class User {
     @Id
-    @GeneratedValue(strategy =GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
-    private String apellido;
-    private String telefono;
+    private String name;
+    private String lastName;
+    private String email;
+    private String phone;
     private LocalDateTime createdAt;
 
-    //FKs de clases/entidad
-    //Un usuario puede tener varias direcciones
     @OneToMany(mappedBy = "user")
     private List<Address> addresses;
 }

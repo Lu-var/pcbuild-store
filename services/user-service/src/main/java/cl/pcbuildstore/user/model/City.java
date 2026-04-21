@@ -9,18 +9,17 @@ import java.util.List;
 @Table
 @Getter
 @Setter
-public class Ciudad {
+public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
+    private String name;
 
-    //Varias ciudades pueden tener la misma region
     @ManyToOne
     @JoinColumn(name = "region_id")
     private Region region;
 
-    //Una ciudad puede aparecer en varias direcciones
-    @OneToMany(mappedBy = "ciudad")
+    @OneToMany(mappedBy = "city")
     private List<Address> addresses;
 }
+
