@@ -45,7 +45,6 @@ public class AddressService {
                 .map(address -> {
                     address.setStreet(addressData.getStreet());
                     address.setCity(addressData.getCity());
-                    address.setRegion(addressData.getRegion());
                     address.setPostalCode(addressData.getPostalCode());
                     address.setIsPrimary(addressData.getIsPrimary());
                     return addressRepository.save(address);

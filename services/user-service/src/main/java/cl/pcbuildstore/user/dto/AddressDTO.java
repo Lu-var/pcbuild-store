@@ -2,7 +2,6 @@ package cl.pcbuildstore.user.dto;
 
 import cl.pcbuildstore.user.model.Address;
 import cl.pcbuildstore.user.model.City;
-import cl.pcbuildstore.user.model.Region;
 import cl.pcbuildstore.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +21,6 @@ public class AddressDTO {
     private Boolean isPrimary;
     private Long userId;
     private Long cityId;
-    private Long regionId;
 
     public AddressDTO(Address address) {
         this.id = address.getId();
@@ -31,15 +29,11 @@ public class AddressDTO {
         this.isPrimary = address.getIsPrimary();
 
         this.userId = Optional.ofNullable(address.getUser())
-            .map(User::getId)
-            .orElse(null);
+                .map(User::getId)
+                .orElse(null);
 
         this.cityId = Optional.ofNullable(address.getCity())
-            .map(City::getId)
-            .orElse(null);
-
-        this.regionId = Optional.ofNullable(address.getRegion())
-            .map(Region::getId)
-            .orElse(null);
+                .map(City::getId)
+                .orElse(null);
     }
 }

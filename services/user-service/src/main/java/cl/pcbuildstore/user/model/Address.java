@@ -21,10 +21,6 @@ public class Address {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "region_id")
-    private Region region;
-
-    @ManyToOne
     @JoinColumn(name = "city_id")
     private City city;
 }

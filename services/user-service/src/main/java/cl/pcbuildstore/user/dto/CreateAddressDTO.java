@@ -25,9 +25,6 @@ public class CreateAddressDTO {
     @NotNull(message = "City ID cannot be null")
     private Long cityId;
 
-    @NotNull(message = "Region ID cannot be null")
-    private Long regionId;
-
     @NotNull(message = "isPrimary cannot be null")
     private Boolean isPrimary;
 }
