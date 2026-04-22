@@ -1,6 +1,6 @@
 package cl.pcbuildstore.user.controller;
 
-import cl.pcbuildstore.user.model.Address;
+import cl.pcbuildstore.user.dto.AddressDTO;
 import cl.pcbuildstore.user.service.AddressService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,31 +20,30 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<Long, Address>> getAllAddresses() {
+    public ResponseEntity<Map<Long, AddressDTO>> getAllAddresses() {
         return ResponseEntity.ok(addressService.getAllAddresses());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Address> getAddressById(@PathVariable Long id) {
+    public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long id) {
         return addressService.getAddressById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Address>> getAddressesByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<AddressDTO>> getAddressesByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(addressService.getAddressesByUserId(userId));
     }
 
     @PostMapping
-    public ResponseEntity<Address> createAddress(@RequestBody Address address) {
-        Address created = addressService.createAddress(address)
-                .orElseThrow(() -> new RuntimeException("Failed to create address"));
+    public ResponseEntity<AddressDTO> createAddress(@RequestBody AddressDTO address) {
+        AddressDTO created = addressService.createAddress(address);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Address> updateAddress(@PathVariable Long id, @RequestBody Address address) {
+    public ResponseEntity<AddressDTO> updateAddress(@PathVariable Long id, @RequestBody AddressDTO address) {
         return addressService.updateAddress(id, address)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
