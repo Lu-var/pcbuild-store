@@ -1,5 +1,6 @@
 package cl.pcbuildstore.user.controller;
 
+import cl.pcbuildstore.user.dto.CreateUserDTO;
 import cl.pcbuildstore.user.dto.UpdateUserDTO;
 import cl.pcbuildstore.user.dto.UserDTO;
 import cl.pcbuildstore.user.model.User;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<Long, UserDTO>> getAllUsers() {
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
@@ -35,7 +36,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO user) {
+    public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO user) {
         UserDTO created = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }

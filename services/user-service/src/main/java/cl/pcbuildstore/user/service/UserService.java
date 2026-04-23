@@ -1,5 +1,6 @@
 package cl.pcbuildstore.user.service;
 
+import cl.pcbuildstore.user.dto.CreateUserDTO;
 import cl.pcbuildstore.user.dto.UpdateUserDTO;
 import cl.pcbuildstore.user.dto.UserDTO;
 import cl.pcbuildstore.user.model.User;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,19 +40,19 @@ public class UserService {
                 .map(UserDTO::new);
     }
 
-    public Map<Long, UserDTO> getAllUsers() {
-        Map<Long, UserDTO> usersMap = new HashMap<>();
-        userRepository.findAll()
-                .forEach(user -> usersMap.put(user.getId(), new UserDTO(user)));
-        return usersMap;
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll()
+                .stream()
+                .map(UserDTO::new)
+                .toList();
     }
 
-    public UserDTO createUser(UserDTO userDTO) {
+    public UserDTO createUser(CreateUserDTO createDTO) {
         User user = new User();
-        user.setName(userDTO.getName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setPhone(userDTO.getPhone());
+        user.setName(createDTO.getName());
+        user.setLastName(createDTO.getLastName());
+        user.setEmail(createDTO.getEmail());
+        user.setPhone(createDTO.getPhone());
 
         user.setCreatedAt(LocalDateTime.now());
 
