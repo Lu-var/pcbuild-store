@@ -261,7 +261,7 @@ A continuacion se define cada uno de los 10 microservicios del sistema PCBuild S
 | MS-03 · user-service  (puerto :8082) |  |
 | :---- | :---- |
 | **Responsabilidad** | Gestiona los perfiles de usuario: datos personales, direcciones de despacho y preferencias. |
-| **Entidades JPA** | User { id, nombre, apellido, email, telefono, createdAt } Address { id, userId, calle, ciudad, region, codigoPostal, esPrincipal } @OneToMany: User \-\> Address |
+| **Entidades JPA** | User { id, name, lastName, email, phone, createdAt } Address { id, userId, street, city, region, postalCode, isPrimary } @OneToMany: User \-\> Address |
 | **Endpoints REST** | GET  /api/users/{id} — obtener perfil de usuario. PUT  /api/users/{id} — actualizar datos personales. POST /api/users/{id}/addresses — agregar direccion de despacho. GET  /api/users/{id}/addresses — listar direcciones. DELETE /api/users/{id}/addresses/{addrId} — eliminar direccion. |
 | **Comunica con** | Es consultado por order-service para obtener email y direccion de despacho al crear una orden. |
 | **Base de datos** | db\_users (MySQL) — tablas: users, addresses. |
