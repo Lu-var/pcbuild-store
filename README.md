@@ -41,26 +41,24 @@ La ausencia de una plataforma inteligente y centralizada obliga a los usuarios a
 
 | ID | Descripción | Actor |
 | ----- | ----- | ----- |
-| **RF-01** | Registrar un nuevo usuario con nombre, correo electrónico y contraseña encriptada (bcrypt). | Cliente |
-| **RF-02** | Autenticar un usuario mediante correo y contraseña, retornando un token JWT válido. | Cliente / Admin |
-| **RF-03** | Cerrar sesión invalidando el token JWT activo del usuario. | Cliente / Admin |
-| **RF-04** | Listar todos los productos del catálogo con nombre, categoría, precio y stock disponible. | Cliente no registrado |
-| **RF-05** | Obtener el detalle completo de un producto, incluyendo especificaciones técnicas de compatibilidad. | Cliente no registrado |
-| **RF-06** | Filtrar productos por categoría (CPU, GPU, RAM, Placa Madre, Almacenamiento, Fuente, Gabinete). | Cliente no registrado |
-| **RF-07** | Verificar la compatibilidad entre dos o más componentes seleccionados, retornando resultado con detalle técnico. | Cliente no registrado |
-| **RF-08** | Agregar un producto al carrito de compras del cliente autenticado, especificando cantidad. | Cliente no registrado |
-| **RF-09** | Actualizar la cantidad de un ítem en el carrito o eliminarlo. | Cliente |
-| **RF-10** | Generar una orden de compra a partir del carrito, con reserva previa de stock. | Cliente |
-| **RF-11** | Procesar el pago de una orden mediante integración con pasarela de pago (simulada). | Cliente |
-| **RF-12** | Consultar el historial de órdenes del cliente autenticado, con estado y detalle. | Cliente |
-| **RF-13** | Cancelar una orden pendiente de pago, liberando el stock reservado. | Cliente |
-| **RF-14** | Crear un nuevo producto en el catálogo con todas sus especificaciones técnicas. | Admin |
-| **RF-15** | Actualizar el precio, stock o descripción de un producto existente. | Admin |
-| **RF-16** | Desactivar (borrado lógico) un producto del catálogo. | Admin |
-| **RF-17** | Listar todas las órdenes del sistema con posibilidad de filtrar por estado. | Admin |
-| **RF-18** | Actualizar el estado de una orden (pendiente → procesando → despachado → entregado). | Admin |
-| **RF-19** | Consultar el stock actual de todos los productos, con alerta cuando sea menor a umbral. | Admin |
-| **RF-20** | Enviar notificación por correo al cliente cuando su orden cambie de estado. | Sistema |
+| **RF-01** | Registrar un nuevo usuario con nombre, correo electrónico y contraseña encriptada (bcrypt). | Usuario no registrado |
+| **RF-02** | Autenticar un usuario mediante correo y contraseña, retornando un token JWT válido. | Usuario no registrado / Administrador |
+| **RF-03** | Listar todos los componentes del catálogo con categoría y especificaciones resumidas. | Usuario (registrado o no registrado) |
+| **RF-04** | Obtener el detalle técnico completo de un componente. | Usuario (registrado o no registrado) |
+| **RF-05** | Filtrar componentes por categoría, marca y rango de precio. | Usuario (registrado o no registrado) |
+| **RF-06** | Crear una nueva build personalizada asociada a un usuario autenticado. | Usuario registrado |
+| **RF-07** | Agregar, actualizar o eliminar componentes dentro de una build activa. | Usuario registrado |
+| **RF-08** | Verificar automáticamente la compatibilidad entre todos los componentes de una build. | Usuario (registrado o no registrado) |
+| **RF-09** | Calcular consumo energético estimado y potencia recomendada de fuente de poder para una build. | Usuario (registrado o no registrado) |
+| **RF-10** | Obtener precios referenciales y disponibilidad aproximada desde vendedores registrados. | Usuario (registrado o no registrado) |
+| **RF-11** | Generar análisis consolidado de build incluyendo compatibilidad, costo estimado y advertencias. | Usuario registrado |
+| **RF-12** | Guardar builds favoritas e historial de configuraciones. | Usuario registrado |
+| **RF-13** | Generar recomendaciones de mejora o upgrade según presupuesto o uso objetivo. | Usuario registrado |
+| **RF-14** | Crear/editar componentes y atributos técnicos del catálogo. | Administrador |
+| **RF-15** | Crear/editar reglas de compatibilidad entre categorías. | Administrador |
+| **RF-16** | Registrar/actualizar referencias de precios de mercado. | Administrador |
+| **RF-17** | Configurar alertas para cambios de precio o disponibilidad. | Usuario registrado |
+| **RF-18** | Enviar notificaciones automáticas al usuario cuando una build presente alertas o cambios relevantes. | Sistema |
 
 ## **2.2 Requerimientos No Funcionales**
 
