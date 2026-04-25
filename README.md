@@ -153,127 +153,114 @@ Estas relaciones muestran qué servicio consulta a cuál para resolver cada caso
 
 ## 4. Historias de Usuario
 
-### **HU-01 — Registro de cuenta**
+### HU-01 — Registro de usuario
 
-Como cliente no registrado, quiero crear una cuenta con mi nombre, correo y contrasena, para poder realizar compras en la tienda.
+Como usuario no registrado, quiero crear una cuenta en el sistema, para poder guardar y gestionar mis configuraciones de hardware.
 
-**Criterios de aceptacion:**
+**Criterios de aceptación:**
+- Dado que ingreso nombre, correo válido y contraseña válida, cuando envío el formulario, entonces el sistema crea la cuenta y retorna HTTP 201.
+- Si el correo ya existe, el sistema retorna HTTP 409 Conflict.
+- La contraseña debe almacenarse encriptada con BCrypt.
 
-* Dado que ingreso nombre, correo valido y contrasena \>= 8 caracteres, cuando envio el formulario, entonces el sistema crea la cuenta y retorna HTTP 201 con el ID generado.
+---
 
-* Si el correo ya existe en el sistema, el endpoint retorna HTTP 409 Conflict con mensaje descriptivo.
+### HU-02 — Autenticación de usuario
 
-* La contrasena nunca se almacena en texto plano; se usa BCrypt.
+Como usuario registrado, quiero iniciar sesión en el sistema, para acceder a mis builds y recomendaciones.
 
-### **HU-02 — Inicio de sesion**
+**Criterios de aceptación:**
+- Dado credenciales correctas, el sistema retorna HTTP 200 con un JWT válido.
+- Si las credenciales son incorrectas, retorna HTTP 401 Unauthorized.
+- El JWT debe incluir el rol del usuario.
 
-Como cliente registrado, quiero autenticarme con mi correo y contrasena, para acceder a mi carrito e historial de ordenes.
+---
 
-**Criterios de aceptacion:**
+### HU-03 — Exploración de catálogo
 
-* Dado que ingreso credenciales correctas, el sistema retorna HTTP 200 con un JWT valido de duracion 24 horas.
+Como usuario, quiero explorar el catálogo de componentes, para conocer las piezas disponibles para mis builds.
 
-* Si las credenciales son incorrectas, retorna HTTP 401 Unauthorized.
+**Criterios de aceptación:**
+- GET /api/products retorna lista de productos con nombre, precio y especificaciones técnicas.
+- Se puede filtrar por categoría (CPU, GPU, RAM, etc.).
+- Productos inactivos no deben aparecer en la respuesta.
 
-* El JWT debe incluir el rol del usuario (CLIENTE o ADMIN).
+---
 
-### **HU-03 — Busqueda y filtrado de productos**
+### HU-04 — Creación de build
 
-Como cliente no registrado, quiero explorar el catalogo filtrando por categoria (CPU, GPU, RAM, etc.), para encontrar las piezas que necesito rapidamente.
+Como usuario, quiero crear una configuración de hardware seleccionando componentes, para diseñar mi PC personalizada.
 
-**Criterios de aceptacion:**
+**Criterios de aceptación:**
+- El sistema permite agregar múltiples productos a una build.
+- Cada build queda asociada al usuario autenticado.
+- Si un producto no existe, retorna HTTP 404.
 
-* El endpoint GET /api/products?category=CPU retorna solo los productos de esa categoria con nombre, precio y stock.
+---
 
-* Si la categoria no existe, retorna HTTP 400 con lista de categorias validas.
+### HU-05 — Validación de compatibilidad
 
-* Productos con stock 0 aparecen en la lista pero marcados como 'sin stock'.
+Como usuario, quiero verificar si los componentes de mi build son compatibles, para evitar errores de configuración.
 
-### **HU-04 — Verificacion de compatibilidad**
+**Criterios de aceptación:**
+- El sistema valida compatibilidad entre componentes seleccionados.
+- Retorna HTTP 200 con resultado compatible o incompatible.
+- Si existe incompatibilidad, se entrega detalle técnico del conflicto.
 
-Como cliente, quiero seleccionar una CPU y una Placa Madre y recibir confirmacion de si son compatibles entre si, para evitar comprar piezas incompatibles.
+---
 
-**Criterios de aceptacion:**
+### HU-06 — Generación de estimación
 
-* Dado que envio los IDs de dos o mas componentes, el sistema retorna HTTP 200 con resultado: compatible: true/false y detalle tecnico de la razon.
+Como usuario, quiero obtener una estimación del costo total de mi build, para conocer el valor aproximado de mi configuración.
 
-* Si alguno de los IDs no existe, retorna HTTP 404 con el ID invalido especificado.
+**Criterios de aceptación:**
+- El sistema calcula el precio total basado en los componentes seleccionados.
+- Retorna HTTP 200 con el monto total calculado.
+- Si la build no existe, retorna HTTP 404.
 
-* La verificacion es accesible sin autenticacion (publico).
+---
 
-### **HU-05 — Agregar producto al carrito**
+### HU-07 — Recomendaciones de componentes
 
-Como cliente autenticado, quiero agregar una GPU a mi carrito especificando la cantidad, para preparar mi compra.
+Como usuario, quiero recibir recomendaciones de mejoras para mi build, para optimizar rendimiento o compatibilidad.
 
-**Criterios de aceptacion:**
+**Criterios de aceptación:**
+- El sistema analiza la build actual del usuario.
+- Sugiere componentes compatibles o de mejor rendimiento.
+- Retorna lista de recomendaciones con justificación técnica.
 
-* Dado que el producto existe y tiene stock suficiente, el sistema agrega el item y retorna HTTP 201 con el estado actualizado del carrito.
+---
 
-* Si la cantidad solicitada supera el stock disponible, retorna HTTP 409 con el stock real disponible.
+### HU-08 — Consulta de builds
 
-* Si el producto ya esta en el carrito, actualiza la cantidad en lugar de duplicar el item.
+Como usuario, quiero ver mis builds guardadas, para gestionar mis configuraciones anteriores.
 
-### **HU-06 — Confirmar orden de compra**
+**Criterios de aceptación:**
+- GET /api/builds retorna lista de builds del usuario autenticado.
+- Cada build incluye sus componentes y estado.
+- Si no existen builds, retorna arreglo vacío.
 
-Como cliente autenticado, quiero confirmar mi carrito como una orden de compra, para proceder al pago.
+---
 
-**Criterios de aceptacion:**
+### HU-09 — Notificaciones del sistema
 
-* El sistema verifica compatibilidad de todos los items del carrito antes de crear la orden; si hay incompatibilidad, retorna HTTP 422 con detalle.
+Como usuario, quiero recibir notificaciones cuando se generen estimaciones o recomendaciones, para estar informado del estado de mis builds.
 
-* El sistema reserva el stock de todos los items; si alguno no tiene stock suficiente, la orden no se crea y retorna HTTP 409\.
+**Criterios de aceptación:**
+- El sistema envía notificaciones al usuario cuando se genera una estimación.
+- También notifica recomendaciones nuevas.
+- Las notificaciones quedan registradas en el sistema.
 
-* Si todo es correcto, se crea la orden con estado PENDIENTE y retorna HTTP 201 con el ID de la orden.
+---
 
-### **HU-07 — Consultar historial de ordenes**
+### HU-10 — Gestión de catálogo (Admin)
 
-Como cliente autenticado, quiero ver todas mis ordenes anteriores con su estado actual, para hacer seguimiento de mis compras.
+Como administrador, quiero gestionar el catálogo de componentes, para mantener actualizada la información del sistema.
 
-**Criterios de aceptacion:**
+**Criterios de aceptación:**
+- Permite crear, actualizar y desactivar productos.
+- Solo usuarios con rol ADMIN pueden acceder.
+- Cambios se reflejan inmediatamente en builds y estimaciones.
 
-* GET /api/orders retorna la lista de ordenes del cliente autenticado, ordenadas de mas reciente a mas antigua.
-
-* Cada orden incluye: ID, fecha, lista de productos, total y estado actual.
-
-* Si el cliente no tiene ordenes, retorna HTTP 200 con arreglo vacio.
-
-### **HU-08 — Actualizar estado de orden (Admin)**
-
-Como administrador, quiero actualizar el estado de una orden de PROCESANDO a DESPACHADO, para mantener informado al cliente.
-
-**Criterios de aceptacion:**
-
-* PATCH /api/orders/{id}/status con body {status: DESPACHADO} actualiza el estado y retorna HTTP 200\.
-
-* Solo un ADMIN puede usar este endpoint; un CLIENTE recibe HTTP 403 Forbidden.
-
-* Al cambiar el estado, el sistema dispara automaticamente una notificacion al correo del cliente.
-
-* Transiciones invalidas (ej: ENTREGADO → PROCESANDO) retornan HTTP 400\.
-
-### **HU-09 — Gestion de catalogo (Admin)**
-
-Como administrador, quiero agregar una nueva GPU al catalogo con sus especificaciones tecnicas, para que los clientes puedan comprarla y el verificador de compatibilidad la reconozca.
-
-**Criterios de aceptacion:**
-
-* POST /api/products crea el producto y retorna HTTP 201 con el ID generado.
-
-* El body debe incluir: nombre, descripcion, precio, stock, categoriaId y atributos tecnicos (ej: tipo de conector, VRAM, TDP).
-
-* Si falta algun campo requerido, retorna HTTP 400 con lista de campos faltantes.
-
-### **HU-10 — Recibir notificacion de cambio de estado**
-
-Como cliente, quiero recibir un correo electronico cuando mi orden sea despachada, para saber que mi pedido esta en camino.
-
-**Criterios de aceptacion:**
-
-* Cuando order-service cambia el estado a DESPACHADO, envia un evento a notification-service.
-
-* notification-service envia un correo al email del cliente con numero de orden y nuevo estado.
-
-* Si el envio falla, el error queda registrado en el log del servicio sin afectar la operacion principal.
 
 # **5\. Definicion de Microservicios**
 
