@@ -65,7 +65,7 @@ La ausencia de una plataforma inteligente y centralizada obliga a los usuarios a
 | ID | Descripción |
 | ----- | ----- |
 | **RNF-01** | Cada endpoint debe retornar una respuesta en menos de 500 ms bajo condiciones normales de carga. |
-| **RNF-02** | Todos los endpoints deben validar los datos de entrada y retornar códigos HTTP semánticos (200, 201, 400, 401, 403, 404, 409, 500\) con cuerpo de error estructurado en JSON. |
+| **RNF-02** | Todos los endpoints deben validar los datos de entrada y retornar códigos HTTP semánticos (200, 201, 400, 401, 403, 404, 409, 500) con cuerpo de error estructurado en JSON. |
 | **RNF-03** | Cada microservicio debe mantener logs estructurados (nivel INFO/ERROR) con identificador de correlación para trazabilidad entre servicios. |
 | **RNF-04** | Cada microservicio debe tener su propia base de datos independiente. Está estrictamente prohibido que dos servicios compartan tablas o esquemas directamente. |
 | **RNF-05** | La comunicación entre microservicios debe realizarse exclusivamente vía API REST usando WebClient o Feign Client. No se permite acceso directo a bases de datos ajenas. |
