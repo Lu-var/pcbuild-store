@@ -1,36 +1,39 @@
-
-
 **Evaluación Parcial 2**
 
-**PCBuild Store**
+**TarroBuild**
 
-*Tienda online de hardware de computador con verificador de compatibilidad*
+*Plataforma online para asistencia de armado de computadores y analisis de compatibilidad de hardware*
+
+## Contenido
+
+- [1. Identificación del Problema](#1-identificación-del-problema)
+- [2. Requerimientos del Sistema](#2-requerimientos-del-sistema)
+- [3. Solución Propuesta](#3-solución-propuesta)
+- [4. Historias de Usuario](#4-historias-de-usuario)
+- [5. Definicion de Microservicios](#5-definicion-de-microservicios)
 
 # **1\. Identificación del Problema**
 
 ## **1.1 Contexto del dominio**
 
-En Chile, el mercado de hardware para computadores ha experimentado un crecimiento sostenido, impulsado por la masificación del trabajo remoto, el gaming y la demanda de equipos de alto rendimiento. Sin embargo, la experiencia de compra de hardware por piezas sigue siendo complicada y poco confiable: los compradores deben visitar múltiples sitios, comparar precios manualmente y, lo más importante, verificar si los componentes que desean adquirir son compatibles entre sí.
+En Chile, el interés por el armado de computadores ha experimentado un crecimiento sostenido, impulsado por la masificación del trabajo remoto, el gaming y la demanda de equipos de alto rendimiento a un menor costo. Sin embargo, para el usuario promedio, configurar y comprar hardware por piezas sigue siendo complicado: se deben visitar múltiples sitios, comparar precios manualmente y verificar si los componentes elegidos son compatibles entre sí.
 
-Actualmente, un cliente que quiere armar o actualizar su PC se enfrenta a que la información técnica de compatibilidad (socket de CPU, tipo de RAM, formato de placa madre, TDP, fuente de poder requerida) está repartida por foros, fichas y documentos en inglés y videos de YouTube. Por otro lado, las tiendas online locales no ofrecen herramientas que validen automáticamente la compatibilidad de la selección de componentes, dejando al usuario expuesto a compras incorrectas que generan costos de devolución, tiempos de espera y frustración. Son pocos los vendedores que disponen de sistemas que gestionen el inventario por componente y que alerten de quiebres de stock antes de confirmar una orden.
+Actualmente, un usuario que quiere armar o actualizar su PC se enfrenta a que la información técnica de compatibilidad (socket de CPU, tipo de RAM, formato de placa madre, TDP y fuente de poder requerida) está repartida por foros, fichas, documentos en inglés y videos de YouTube. Por otro lado, las tiendas online locales no ofrecen herramientas que validen automáticamente la selección de componentes, dejando al usuario expuesto a compras incorrectas que generan costos de devolución, tiempos de espera y frustración.
 
-La ausencia de una plataforma centralizada que integre catálogo, verificación de compatibilidad, carrito, pagos e historial de órdenes obliga tanto a clientes como a administradores de tienda a operar con procesos manuales e ineficientes, elevando la tasa de errores y reduciendo la satisfacción post-compra.
+La ausencia de una plataforma inteligente y centralizada obliga a los usuarios a realizar múltiples verificaciones manuales, generando incompatibilidades, sobrecostos y decisiones de compra deficientes.
 
 ## **1.2 Declaración del problema principal**
 
-*Los clientes que desean comprar piezas de computador en línea no disponen de un sistema que valide automáticamente la compatibilidad entre componentes antes de confirmar la compra, lo que genera órdenes con piezas incompatibles, devoluciones costosas y pérdida de confianza en la tienda.*
-
-## 
-
-## 
+*Los usuarios que desean armar o actualizar un computador no disponen de un sistema centralizado que permita validar automáticamente la compatibilidad técnica entre componentes, estimar requerimientos energéticos, comparar precios de referencia y recibir recomendaciones de mejora antes de tomar una decisión de compra.*
 
 ## **1.3 Actores / Usuarios involucrados**
 
 | Actor | Descripción y necesidades |
-| ----- | ----- |
-| **Cliente registrado** | Persona que arma o actualiza su PC. Necesita buscar piezas, verificar compatibilidad, agregar al carrito, pagar y hacer seguimiento de su orden. |
-| **Cliente no registrado** | Visitante que puede explorar el catálogo y usar el verificador de compatibilidad, pero no puede completar una compra sin registrarse. |
-| **Administrador de tienda** | Encargado de gestionar el catálogo de productos, stock, precios, órdenes y usuarios. Necesita visibilidad completa del estado del negocio. |
+| --- | --- |
+| **Usuario registrado** | Puede crear configuraciones personalizadas, guardar builds, recibir análisis completos, comparar precios referenciales y gestionar alertas/notificaciones. |
+| **Usuario no registrado** | Puede explorar el catálogo de componentes, consultar especificaciones técnicas y ejecutar verificaciones básicas de compatibilidad. |
+| **Administrador** | Gestiona el catálogo de componentes, atributos técnicos, reglas de compatibilidad, referencias de precio y monitorea el funcionamiento general del sistema. |
+| **Sistema** | Ejecuta validaciones automáticas, cálculos energéticos, generación de recomendaciones y envío de alertas configuradas. |
 
 # **2\. Requerimientos del Sistema**
 
@@ -74,17 +77,23 @@ La ausencia de una plataforma centralizada que integre catálogo, verificación 
 
 ## **3.1 Descripción general**
 
-PCBuild Store es una tienda online construida sobre una arquitectura de microservicios que permite a los clientes explorar un catálogo de piezas de computador, verificar la compatibilidad entre componentes antes de comprar, gestionar su carrito y concretar pagos de forma segura. La plataforma expone todos sus servicios al exterior a través de un único API Gateway, que centraliza el enrutamiento, la autenticación de tokens y el control de acceso.
+TarroBuild es una plataforma web basada en arquitectura de microservicios que permite a los usuarios explorar componentes de hardware, crear configuraciones de PC personalizadas y someterlas a procesos automáticos de validación técnica.
 
-La característica diferenciadora del sistema es el Compatibility Service, un microservicio especializado que mantiene una matriz de compatibilidad entre componentes (socket CPU/placa madre, tipo de RAM soportado, conector de alimentación GPU, dimensiones de gabinete, etc.) y expone endpoints de consulta que pueden ser invocados tanto desde el frontend como desde el Order Service al momento de confirmar una compra, actuando como una capa de validación técnica antes de procesar cualquier transacción.
+A través de un API Gateway centralizado, el sistema expone servicios especializados que colaboran entre sí para entregar una evaluación integral de cada build: compatibilidad entre piezas, estimación de consumo energético, consulta de precios referenciales, sugerencias de mejora y almacenamiento histórico de configuraciones.
 
-El sistema es desplegado con Docker Compose, donde cada servicio corre en su propio contenedor con su propia base de datos MySQL/PostgreSQL. La comunicación inter-servicio se realiza mediante WebClient (reactivo) para llamadas síncronas. El API Gateway actúa como único punto de entrada, validando el JWT antes de propagar la solicitud al servicio correspondiente.
+El sistema no gestiona directamente procesos de venta física ni despacho de productos. En su lugar, centraliza información técnica de componentes, disponibilidad consultada desde proveedores, validación automática de compatibilidad y generación de cotizaciones persistentes.
+
+La principal característica diferenciadora es que la plataforma no se limita a mostrar componentes, sino que interpreta técnicamente la combinación seleccionada por el usuario y genera un informe consolidado que reduce errores de compatibilidad y mejora la toma de decisiones antes de una compra real en el mercado.
+
+Cada microservicio opera con su propia base de datos independiente y se comunica mediante WebClient o Feign Client bajo un modelo REST desacoplado.
 
 ## **3.2 Justificación del uso de microservicios**
 
-El dominio de una tienda de hardware presenta módulos con responsabilidades claramente delimitadas y ciclos de cambio independientes: el catálogo se actualiza con nuevos modelos frecuentemente, el inventario cambia con cada venta, y la lógica de compatibilidad es estable y puede cachearse agresivamente. Una arquitectura monolítica obligaría a redesplegar todo el sistema ante cualquier cambio. Con microservicios, cada equipo puede iterar sobre su servicio de forma autónoma.
+TarroBuild utiliza una arquitectura de microservicios para separar los distintos contextos del dominio de configuración y validación de hardware en módulos independientes. Esto permite aislar responsabilidades como catálogo, compatibilidad y recomendaciones, evitando un diseño monolítico con alto acoplamiento.
 
-Adicionalmente, los módulos de Compatibilidad y Catálogo reciben alta carga de lectura (búsquedas, comparaciones) mientras que Order y Payment tienen picos de escritura transaccional. La separación permite escalar cada uno de forma independiente según su demanda real, optimizando el uso de recursos.
+Cada servicio puede evolucionar de forma autónoma según sus reglas de negocio y nivel de cambio, lo que facilita el mantenimiento y la escalabilidad del sistema. Por ejemplo, la lógica de compatibilidad puede ajustarse sin afectar el resto del sistema.
+
+Además, la separación por servicios permite escalar de manera independiente aquellos módulos con mayor carga de consultas, manteniendo eficiencia en el uso de recursos.
 
 ## **3.3 Diagrama conceptual de la arquitectura**
 
