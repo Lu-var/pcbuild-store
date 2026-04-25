@@ -1,16 +1,14 @@
 package cl.pcbuildstore.user.service;
 
-import cl.pcbuildstore.user.dto.CreateUserDTO;
-import cl.pcbuildstore.user.dto.UpdateUserDTO;
-import cl.pcbuildstore.user.dto.UserDTO;
+import cl.pcbuildstore.user.dto.UserRequest;
+import cl.pcbuildstore.user.dto.UserUpdateRequest;
+import cl.pcbuildstore.user.dto.UserResponse;
 import cl.pcbuildstore.user.model.User;
 import cl.pcbuildstore.user.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -22,32 +20,32 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Optional<UserDTO> getUserById(Long id) {
+    public Optional<UserResponse> getUserById(Long id) {
         return userRepository
                 .findById(id)
-                .map(UserDTO::new);
+                .map(UserResponse::new);
     }
 
-    public Optional<UserDTO> getUserByEmail(String email) {
+    public Optional<UserResponse> getUserByEmail(String email) {
         return userRepository
                 .findByEmail(email)
-                .map(UserDTO::new);
+                .map(UserResponse::new);
     }
 
-    public Optional<UserDTO> getUserByPhone(String phone) {
+    public Optional<UserResponse> getUserByPhone(String phone) {
         return userRepository
                 .findByPhone(phone)
-                .map(UserDTO::new);
+                .map(UserResponse::new);
     }
 
-    public List<UserDTO> getAllUsers() {
+    public List<UserResponse> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(UserDTO::new)
+                .map(UserResponse::new)
                 .toList();
     }
 
-    public UserDTO createUser(CreateUserDTO createDTO) {
+    public UserResponse createUser(UserRequest createDTO) {
         User user = new User();
         user.setName(createDTO.getName());
         user.setLastName(createDTO.getLastName());
@@ -58,17 +56,17 @@ public class UserService {
 
         User saved = userRepository.save(user);
 
-        return new UserDTO(saved);
+        return new UserResponse(saved);
     }
 
-    public Optional<UserDTO> updateUser(Long id, UpdateUserDTO userData) {
+    public Optional<UserResponse> updateUser(Long id, UserUpdateRequest userData) {
         return userRepository.findById(id)
                 .map(user -> {
                     user.setName(userData.getName());
                     user.setLastName(userData.getLastName());
                     user.setPhone(userData.getPhone());
                     User saved = userRepository.save(user);
-                    return new UserDTO(saved);
+                    return new UserResponse(saved);
                 });
     }
 

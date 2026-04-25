@@ -1,10 +1,12 @@
 package cl.pcbuildstore.user.service;
 
+import cl.pcbuildstore.user.dto.RegionDTO;
 import cl.pcbuildstore.user.model.Region;
 import cl.pcbuildstore.user.repository.RegionRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,31 +20,36 @@ public class RegionService {
         this.regionRepository = regionRepository;
     }
 
-    public Optional<Region> getRegionById(Long id) {
-        return regionRepository.findById(id);
-    }
-
-    public Optional<Region> getRegionByName(String name) {
-        return regionRepository.findByName(name);
-    }
-
-    public Map<Long, Region> getAllRegions() {
-        Map<Long, Region> regionsMap = new HashMap<>();
-        regionRepository.findAll().forEach(region -> regionsMap.put(region.getId(), region));
-        return regionsMap;
-    }
-
-    public Region createRegion(Region region) {
-        return regionRepository.save(region);
-    }
-
-    public Region updateRegion(Long id, Region regionDetails) {
+    public Optional<RegionDTO> getRegionById(Long id) {
         return regionRepository.findById(id)
-                .map(region -> {
-                    region.setName(regionDetails.getName());
-                    return regionRepository.save(region);
-                })
+                .map(RegionDTO::new);
+    }
+
+    public Optional<RegionDTO> getRegionByName(String name) {
+        return regionRepository.findByName(name)
+                .map(RegionDTO::new);
+    }
+
+    public List<RegionDTO> getAllRegions() {
+        return regionRepository.findAll()
+                .stream()
+                .map(RegionDTO::new)
+                .toList();
+    }
+
+    public RegionDTO createRegion(RegionDTO regionData) {
+        Region newRegion = new Region();
+        newRegion.setName(regionData.getName());
+        Region saved = regionRepository.save(newRegion);
+        return new RegionDTO(saved);
+    }
+
+    public RegionDTO updateRegion(Long id, RegionDTO regionData) {
+        Region target = regionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Region not found"));
+        target.setName(regionData.getName());
+        Region saved = regionRepository.save(target);
+        return new RegionDTO(saved);
 
     }
 

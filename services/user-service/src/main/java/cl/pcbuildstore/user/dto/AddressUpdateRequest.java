@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateAddressDTO {
+public class AddressUpdateRequest {
 
     @NotBlank(message = "Street cannot be empty")
     @Size(min = 5, max = 200, message = "Street must be between 5 and 200 characters")
