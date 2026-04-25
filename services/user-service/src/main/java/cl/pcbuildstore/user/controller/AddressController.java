@@ -1,7 +1,8 @@
 package cl.pcbuildstore.user.controller;
 
-import cl.pcbuildstore.user.dto.AddressDTO;
+import cl.pcbuildstore.user.dto.AddressResponse;
 import cl.pcbuildstore.user.service.AddressService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,30 +21,30 @@ public class AddressController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<Long, AddressDTO>> getAllAddresses() {
+    public ResponseEntity<List<AddressResponse>> getAllAddresses() {
         return ResponseEntity.ok(addressService.getAllAddresses());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AddressDTO> getAddressById(@PathVariable Long id) {
+    public ResponseEntity<AddressResponse> getAddressById(@PathVariable Long id) {
         return addressService.getAddressById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<AddressDTO>> getAddressesByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<AddressResponse>> getAddressesByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(addressService.getAddressesByUserId(userId));
     }
 
     @PostMapping
-    public ResponseEntity<AddressDTO> createAddress(@RequestBody AddressDTO address) {
-        AddressDTO created = addressService.createAddress(address);
+    public ResponseEntity<AddressResponse> createAddress(@Valid @RequestBody AddressResponse address) {
+        AddressResponse created = addressService.createAddress(address);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AddressDTO> updateAddress(@PathVariable Long id, @RequestBody AddressDTO address) {
+    public ResponseEntity<AddressResponse> updateAddress(@Valid @PathVariable Long id, @RequestBody AddressResponse address) {
         return addressService.updateAddress(id, address)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

@@ -6,26 +6,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
-    private Long id;
+public class UserUpdateRequest {
     private String name;
     private String lastName;
     private String email;
     private String phone;
-    private LocalDateTime createdAt;
 
-    public UserDTO(User user) {
-        this.id = user.getId();
+    public UserUpdateRequest(User user) {
         this.name = user.getName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.phone = user.getPhone();
-        this.createdAt = user.getCreatedAt();
     }
 }

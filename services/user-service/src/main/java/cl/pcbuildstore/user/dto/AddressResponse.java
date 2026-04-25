@@ -14,7 +14,7 @@ import java.util.Optional;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressDTO {
+public class AddressResponse {
     private Long id;
     private String street;
     private String postalCode;
@@ -22,7 +22,7 @@ public class AddressDTO {
     private Long userId;
     private Long cityId;
 
-    public AddressDTO(Address address) {
+    public AddressResponse(Address address) {
         this.id = address.getId();
         this.street = address.getStreet();
         this.postalCode = address.getPostalCode();

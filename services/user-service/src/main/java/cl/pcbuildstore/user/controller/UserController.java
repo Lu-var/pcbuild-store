@@ -1,17 +1,14 @@
 package cl.pcbuildstore.user.controller;
 
-import cl.pcbuildstore.user.dto.CreateUserDTO;
-import cl.pcbuildstore.user.dto.UpdateUserDTO;
-import cl.pcbuildstore.user.dto.UserDTO;
-import cl.pcbuildstore.user.model.User;
+import cl.pcbuildstore.user.dto.UserRequest;
+import cl.pcbuildstore.user.dto.UserUpdateRequest;
+import cl.pcbuildstore.user.dto.UserResponse;
 import cl.pcbuildstore.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -24,25 +21,25 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> getAllUsers() {
+    public ResponseEntity<List<UserResponse>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
         return userService.getUserById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody CreateUserDTO user) {
-        UserDTO created = userService.createUser(user);
+    public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user) {
+        UserResponse created = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody UpdateUserDTO user) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @RequestBody UserUpdateRequest user) {
         return userService.updateUser(id, user)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

@@ -1,5 +1,6 @@
 package cl.pcbuildstore.user.controller;
 
+import cl.pcbuildstore.user.dto.RegionDTO;
 import cl.pcbuildstore.user.model.Region;
 import cl.pcbuildstore.user.service.RegionService;
 import org.springframework.http.HttpStatus;
@@ -20,27 +21,27 @@ public class RegionController {
     }
 
     @GetMapping
-    public ResponseEntity<Map<Long, Region>> getAllRegions() {
+    public ResponseEntity<List<RegionDTO>> getAllRegions() {
         return ResponseEntity.ok(regionService.getAllRegions());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Region> getRegionById(@PathVariable Long id) {
+    public ResponseEntity<RegionDTO> getRegionById(@PathVariable Long id) {
         return regionService.getRegionById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Region> createRegion(@RequestBody Region region) {
-        Region created = regionService.createRegion(region);
+    public ResponseEntity<RegionDTO> createRegion(@RequestBody RegionDTO region) {
+        RegionDTO created = regionService.createRegion(region);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Region> updateRegion(@PathVariable Long id, @RequestBody Region region) {
+    public ResponseEntity<RegionDTO> updateRegion(@PathVariable Long id, @RequestBody RegionDTO region) {
         try {
-            Region updated = regionService.updateRegion(id, region);
+            RegionDTO updated = regionService.updateRegion(id, region);
             return ResponseEntity.ok(updated);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

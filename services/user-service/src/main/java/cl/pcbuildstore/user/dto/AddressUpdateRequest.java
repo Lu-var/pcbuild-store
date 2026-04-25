@@ -1,4 +1,4 @@
 package cl.pcbuildstore.user.dto;
 
-public class UpdateAddressDTO {
+public class AddressUpdateRequest {
 }

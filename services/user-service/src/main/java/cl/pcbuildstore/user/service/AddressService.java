@@ -1,13 +1,11 @@
 package cl.pcbuildstore.user.service;
 
-import cl.pcbuildstore.user.dto.AddressDTO;
+import cl.pcbuildstore.user.dto.AddressResponse;
 import cl.pcbuildstore.user.model.Address;
 import cl.pcbuildstore.user.repository.AddressRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -19,48 +17,48 @@ public class AddressService {
         this.addressRepository = addressRepository;
     }
 
-    public Optional<AddressDTO> getAddressById(Long id) {
+    public Optional<AddressResponse> getAddressById(Long id) {
         return addressRepository.findById(id)
-                .map(AddressDTO::new);
+                .map(AddressResponse::new);
     }
 
-    public List<AddressDTO> getAddressesByUserId(Long userId) {
+    public List<AddressResponse> getAddressesByUserId(Long userId) {
         return (addressRepository.findByUserId(userId)
                 .stream()
-                .map(AddressDTO::new)
+                .map(AddressResponse::new)
                 .toList());
     }
 
-    public Optional<AddressDTO> getPrimaryAddressByUserId(Long userId) {
+    public Optional<AddressResponse> getPrimaryAddressByUserId(Long userId) {
         return addressRepository.findByUserIdAndIsPrimary(userId, true)
-                .map(AddressDTO::new);
+                .map(AddressResponse::new);
     }
 
-    public Map<Long, AddressDTO> getAllAddresses() {
-        Map<Long, AddressDTO> addressMap = new HashMap<>();
-        addressRepository.findAll()
-                .forEach(address -> addressMap.put(address.getId(), new AddressDTO(address)));
-        return addressMap;
+    public List <AddressResponse> getAllAddresses() {
+        return addressRepository.findAll()
+                .stream()
+                .map(AddressResponse::new)
+                .toList();
     }
 
-    public AddressDTO createAddress(AddressDTO address) {
+    public AddressResponse createAddress(AddressResponse address) {
         Address newAddress = new Address();
         newAddress.setStreet(address.getStreet());
         newAddress.setPostalCode(address.getPostalCode());
         newAddress.setIsPrimary(address.getIsPrimary());
 
         Address savedAddress = addressRepository.save(newAddress);
-        return new AddressDTO(savedAddress);
+        return new AddressResponse(savedAddress);
     }
 
-    public Optional<AddressDTO> updateAddress(Long id, AddressDTO addressDTO) {
+    public Optional<AddressResponse> updateAddress(Long id, AddressResponse addressResponse) {
         return addressRepository.findById(id)
                 .map(address -> {
-                    address.setStreet(addressDTO.getStreet());
-                    address.setPostalCode(addressDTO.getPostalCode());
-                    address.setIsPrimary(addressDTO.getIsPrimary());
+                    address.setStreet(addressResponse.getStreet());
+                    address.setPostalCode(addressResponse.getPostalCode());
+                    address.setIsPrimary(addressResponse.getIsPrimary());
                     Address saved = addressRepository.save(address);
-                    return new AddressDTO(saved);
+                    return new AddressResponse(saved);
                 });
 
     }
