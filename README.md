@@ -95,33 +95,63 @@ Además, la separación por servicios permite escalar de manera independiente aq
 
 ## **3.3 Diagrama conceptual de la arquitectura**
 
-**\[ CLIENTE / BROWSER \]**
+## Arquitectura de Microservicios — TarroBuild
 
-|
+La plataforma se organiza en servicios especializados conectados mediante un API Gateway central.
 
-**\[ API GATEWAY :8080 \]**
+```
+CLIENTE / FRONTEND
+        |
+        v
+API GATEWAY :8080
+        |
+------------------------------------------------------------
+|        |        |        |        |        |        |
+AUTH   USER   PRODUCT  CATEGORY  COMPAT.  PROVIDER  BUILD
+8081   8082    8083     8084      8085     8086      8087
+------------------------------------------------------------
+                         |
+                         v
+                 ESTIMATE :8088
+                         |
+                         v
+             RECOMMENDATION :8089
+                         |
+                         v
+             NOTIFICATION :8090
+```
 
-*| enrutamiento \+ validacion JWT |*
+### Características de la arquitectura
 
-| auth-service:8081 | user-service:8082 | product-service:8083 | category-service:8084 | compatibility-service:8085 |
-| :---: | :---: | :---: | :---: | :---: |
-| **inventory-service:8086** | **cart-service:8087** | **order-service:8088** | **payment-service:8089** | **notification-service:8090** |
+1. Cada microservicio cuenta con base de datos independiente (H2 / MySQL).
+2. La comunicación entre servicios se realiza mediante WebClient o Feign Client.
+3. El API Gateway actúa como único punto de entrada del sistema.
+4. La arquitectura prioriza la separación de responsabilidades y la escalabilidad.
 
-*Cada servicio tiene su propia base de datos independiente (MySQL)*
+### Flujos de comunicación inter-servicio clave
 
-### **Flujos de comunicación inter-servicio clave**
+Estas relaciones muestran qué servicio consulta a cuál para resolver cada caso de uso.
 
-* order-service → inventory-service: verifica y reserva stock antes de confirmar orden
+- build-service → product-service: obtiene información técnica de componentes para construir la configuración
 
-* order-service → compatibility-service: valida compatibilidad del carrito antes de crear la orden
+- build-service → compatibility-service: valida compatibilidad entre componentes seleccionados en la build
 
-* order-service → payment-service: solicita procesamiento del pago
+- build-service → provider-service: consulta disponibilidad o referencia de componentes externos
 
-* order-service → notification-service: dispara email al cambiar estado de orden
+- estimate-service → build-service: obtiene la configuración validada para generar la cotización
 
-* cart-service → product-service: consulta precio y disponibilidad al agregar items
+- estimate-service → product-service: obtiene precios y atributos técnicos actualizados
 
-# **4\. Historias de Usuario**
+- recommendation-service → build-service: analiza la configuración actual del usuario
+
+- recommendation-service → product-service: obtiene catálogo para generar sugerencias
+
+- estimate-service → notification-service: envía notificación al usuario al generar una cotización
+
+- recommendation-service → notification-service: notifica recomendaciones relevantes generadas al usuario
+
+
+## 4. Historias de Usuario
 
 ### **HU-01 — Registro de cuenta**
 
