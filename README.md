@@ -277,108 +277,132 @@ Como cliente, quiero recibir un correo electronico cuando mi orden sea despachad
 
 # **5\. Definicion de Microservicios**
 
-A continuacion se define cada uno de los 10 microservicios del sistema PCBuild Store, con su responsabilidad, entidades JPA, endpoints REST, dependencias y base de datos propia.
+A continuacion se define cada uno de los 11 microservicios del sistema TarroBuild, con su responsabilidad, entidades JPA, endpoints REST, dependencias y base de datos propia.
 
-| MS-01 · api-gateway  (puerto :8080) |  |
+---
+
+| MS-01 · api-gateway (puerto :8080) | |
 | :---- | :---- |
-| **Responsabilidad** | Actua como unico punto de entrada del sistema. Enruta solicitudes HTTP hacia los microservicios correspondientes, valida tokens JWT y aplica filtros de seguridad globales. |
-| **Entidades JPA** | No maneja entidades JPA propias. Configuracion de rutas en application.yml. |
-| **Endpoints REST** | Todas las rutas son proxies hacia los servicios internos. No expone logica propia. GET  /actuator/health — estado del gateway. |
-| **Comunica con** | Llama internamente a auth-service para validar tokens JWT en cada solicitud entrante. |
-| **Base de datos** | Sin base de datos propia (solo configuracion en memoria). |
+| **Responsabilidad** | Actúa como único punto de entrada del sistema. Enruta solicitudes HTTP hacia los microservicios internos y centraliza la validación de seguridad mediante JWT. |
+| **Entidades JPA** | No maneja entidades JPA propias. Configuración de rutas en application.yml. |
+| **Endpoints REST** | Expone únicamente endpoints proxy hacia los servicios internos. GET /actuator/health para monitoreo del estado del sistema. |
+| **Comunica con** | Consulta auth-service para validar tokens JWT. |
+| **Base de datos** | No posee base de datos. |
 
-| MS-02 · auth-service  (puerto :8081) |  |
+---
+
+| MS-02 · auth-service (puerto :8081) | |
 | :---- | :---- |
-| **Responsabilidad** | Gestiona la autenticacion de usuarios: registro, login y generacion/validacion de tokens JWT. |
-| **Entidades JPA** | Credential { id, email, passwordHash, role, userId, createdAt } @OneToOne con User en user-service (referencia por userId, no FK directa) |
-| **Endpoints REST** | POST /api/auth/register — registrar nuevo usuario. POST /api/auth/login — autenticar y obtener JWT. POST /api/auth/logout — invalidar token activo. GET  /api/auth/validate — validar token JWT (usado por gateway). |
-| **Comunica con** | Es consultado por api-gateway en cada solicitud para validar JWT. |
-| **Base de datos** | db\_auth (MySQL) — tabla: credentials. |
+| **Responsabilidad** | Gestiona autenticación de usuarios mediante registro, login, cierre de sesión y emisión de JWT. |
+| **Entidades JPA** | Credential { id, email, passwordHash, role, userId, createdAt } |
+| **Endpoints REST** | POST /api/auth/register, POST /api/auth/login, POST /api/auth/logout, GET /api/auth/validate |
+| **Comunica con** | Es consultado por api-gateway para validar tokens JWT. Consulta user-service para asociación de perfil de usuario. |
+| **Base de datos** | db_auth |
 
-| MS-03 · user-service  (puerto :8082) |  |
+---
+
+| MS-03 · user-service (puerto :8082) | |
 | :---- | :---- |
-| **Responsabilidad** | Gestiona los perfiles de usuario: datos personales, direcciones de despacho y preferencias. |
-| **Entidades JPA** | User { id, name, lastName, email, phone, createdAt } Address { id, userId, street, city, region, postalCode, isPrimary } @OneToMany: User \-\> Address |
-| **Endpoints REST** | GET  /api/users/{id} — obtener perfil de usuario. PUT  /api/users/{id} — actualizar datos personales. POST /api/users/{id}/addresses — agregar direccion de despacho. GET  /api/users/{id}/addresses — listar direcciones. DELETE /api/users/{id}/addresses/{addrId} — eliminar direccion. |
-| **Comunica con** | Es consultado por order-service para obtener email y direccion de despacho al crear una orden. |
-| **Base de datos** | db\_users (MySQL) — tablas: users, addresses. |
+| **Responsabilidad** | Gestiona información de usuario y perfiles asociados. |
+| **Entidades JPA** | User { id, name, lastName, email, phone, createdAt } |
+| **Endpoints REST** | CRUD de usuarios (/api/users) |
+| **Comunica con** | Es consultado por notification-service y auth-service para obtener datos del usuario. |
+| **Base de datos** | db_users |
 
-| MS-04 · category-service  (puerto :8084) |  |
+---
+
+| MS-04 · category-service (puerto :8084) | |
 | :---- | :---- |
-| **Responsabilidad** | Gestiona las categorias de productos del catalogo (CPU, GPU, RAM, Placa Madre, etc.). |
-| **Entidades JPA** | Category { id, nombre, slug, descripcion, activa } AttributeDefinition { id, categoryId, nombreAtributo, tipoDato, requerido }  — define que atributos tecnicos tiene cada categoria. @OneToMany: Category \-\> AttributeDefinition |
-| **Endpoints REST** | GET  /api/categories — listar todas las categorias activas. GET  /api/categories/{id} — detalle de categoria con sus atributos. POST /api/categories — crear categoria (Admin). PUT  /api/categories/{id} — actualizar categoria (Admin). DELETE /api/categories/{id} — desactivar categoria (Admin). |
-| **Comunica con** | Es consultado por product-service para validar que la categoriaId existe al crear/editar un producto. |
-| **Base de datos** | db\_categories (MySQL) — tablas: categories, attribute\_definitions. |
+| **Responsabilidad** | Administra categorías de productos y sus atributos técnicos asociados. |
+| **Entidades JPA** | Category { id, nombre, slug, descripcion, activa } / AttributeDefinition { id, categoryId, nombreAtributo, tipoDato, requerido } |
+| **Endpoints REST** | CRUD de categorías y atributos técnicos. |
+| **Comunica con** | Es consultado por product-service para validar que una categoría existe. |
+| **Base de datos** | db_categories |
 
-| MS-05 · product-service  (puerto :8083) |  |
+---
+
+| MS-05 · product-service (puerto :8083) | |
 | :---- | :---- |
-| **Responsabilidad** | Gestiona el catalogo completo de productos: creacion, actualizacion, busqueda y atributos tecnicos por categoria. |
-| **Entidades JPA** | Product { id, nombre, descripcion, precio, categoriaId, marca, modelo, activo, createdAt } ProductAttribute { id, productId, nombreAtributo, valor }  — almacena specs tecnicas (ej: socket=AM5, tdp=125W). @OneToMany: Product \-\> ProductAttribute |
-| **Endpoints REST** | GET  /api/products — listar productos (filtros: category, marca, precioMin, precioMax). GET  /api/products/{id} — detalle completo con atributos tecnicos. POST /api/products — crear producto (Admin). PUT  /api/products/{id} — actualizar producto (Admin). DELETE /api/products/{id} — desactivar producto (Admin). GET  /api/products/{id}/attributes — obtener atributos tecnicos. |
-| **Comunica con** | Consulta category-service para validar categoriaId. Es consultado por cart-service, order-service y compatibility-service. |
-| **Base de datos** | db\_products (MySQL) — tablas: products, product\_attributes. |
+| **Responsabilidad** | Gestiona el catálogo de componentes de hardware y sus especificaciones técnicas. |
+| **Entidades JPA** | Product { id, nombre, descripcion, precio, categoriaId, marca, modelo, activo } / ProductAttribute { id, productId, nombreAtributo, valor } |
+| **Endpoints REST** | CRUD de productos y consulta de atributos técnicos. |
+| **Comunica con** | Consulta category-service para validar categorías. Es consultado por build-service, compatibility-service, recommendation-service y estimate-service para obtener datos de productos. |
+| **Base de datos** | db_products |
 
-| MS-06 · compatibility-service  (puerto :8085) |  |
+---
+
+| MS-06 · compatibility-service (puerto :8085) | |
 | :---- | :---- |
-| **Responsabilidad** | Verifica la compatibilidad tecnica entre dos o mas componentes, basandose en sus atributos y reglas de compatibilidad precargadas. |
-| **Entidades JPA** | CompatibilityRule { id, categoryA, atributoA, operador, categoryB, atributoB, descripcionError }   — ejemplo: CPU.socket EQUALS MotherBoard.socket CompatibilityCheck { id, productoIds\[\], resultado, detalle, timestamp }  — historial de verificaciones. |
-| **Endpoints REST** | POST /api/compatibility/check — verificar compatibilidad entre lista de productIds. GET  /api/compatibility/rules — listar reglas vigentes (Admin). POST /api/compatibility/rules — crear regla de compatibilidad (Admin). DELETE /api/compatibility/rules/{id} — eliminar regla (Admin). |
-| **Comunica con** | Consulta product-service para obtener los atributos tecnicos de cada producto a verificar. Es consultado por order-service antes de confirmar una orden. |
-| **Base de datos** | db\_compatibility (MySQL) — tablas: compatibility\_rules, compatibility\_checks. |
+| **Responsabilidad** | Valida compatibilidad técnica entre componentes de hardware basándose en reglas definidas. |
+| **Entidades JPA** | CompatibilityRule { id, categoryA, atributoA, operador, categoryB, atributoB, descripcionError } / CompatibilityCheck { id, productIds, resultado, detalle } |
+| **Endpoints REST** | POST /api/compatibility/check, CRUD de reglas de compatibilidad. |
+| **Comunica con** | Consulta product-service para obtener atributos técnicos. |
+| **Base de datos** | db_compatibility |
 
-| MS-07 · inventory-service  (puerto :8086) |  |
+---
+
+| MS-07 · provider-service (puerto :8086) | |
 | :---- | :---- |
-| **Responsabilidad** | Controla el stock disponible y reservado de cada producto, procesando movimientos de entrada, reserva y liberacion. |
-| **Entidades JPA** | Stock { id, productId, cantidadDisponible, cantidadReservada, umbralAlerta } StockMovement { id, productId, tipo (ENTRADA/RESERVA/LIBERACION/DESPACHO), cantidad, referencia, timestamp } |
-| **Endpoints REST** | GET  /api/inventory/{productId} — consultar stock actual. GET  /api/inventory — listar todos (Admin, con filtro alertas). POST /api/inventory/{productId}/reserve — reservar cantidad para una orden. POST /api/inventory/{productId}/release — liberar reserva (orden cancelada). POST /api/inventory/{productId}/dispatch — confirmar despacho (reduce reserva). PUT  /api/inventory/{productId} — ajustar stock manualmente (Admin). |
-| **Comunica con** | Es consultado por order-service al confirmar y cancelar ordenes. Puede ser consultado por product-service para mostrar disponibilidad. |
-| **Base de datos** | db\_inventory (MySQL) — tablas: stock, stock\_movements. |
+| **Responsabilidad** | Gestiona proveedores externos o referencias de mercado de componentes. |
+| **Entidades JPA** | Provider { id, nombre, contacto, sitioWeb, activo } / ProviderProduct { id, providerId, productId, referenciaExterna } |
+| **Endpoints REST** | CRUD de proveedores y consulta de referencias externas. |
+| **Comunica con** | Es consultado por build-service para entregar referencias externas de componentes. |
+| **Base de datos** | db_providers |
 
-| MS-08 · cart-service  (puerto :8087) |  |
+---
+
+| MS-08 · build-service (puerto :8087) | |
 | :---- | :---- |
-| **Responsabilidad** | Gestiona el carrito de compras activo de cada cliente autenticado, incluyendo items, cantidades y calculo de totales. |
-| **Entidades JPA** | Cart { id, userId, estado (ACTIVO/CONVERTIDO), updatedAt } CartItem { id, cartId, productId, cantidad, precioUnitario } @OneToMany: Cart \-\> CartItem |
-| **Endpoints REST** | GET  /api/cart — obtener carrito activo del cliente autenticado. POST /api/cart/items — agregar item al carrito. PUT  /api/cart/items/{itemId} — actualizar cantidad de item. DELETE /api/cart/items/{itemId} — eliminar item del carrito. DELETE /api/cart — vaciar carrito completo. GET  /api/cart/total — calcular total actual del carrito. |
-| **Comunica con** | Consulta product-service para validar existencia y obtener precio actual. Consulta inventory-service para verificar stock antes de agregar item. |
-| **Base de datos** | db\_cart (MySQL) — tablas: carts, cart\_items. |
+| **Responsabilidad** | Núcleo del sistema. Gestiona configuraciones de hardware creadas por el usuario (builds). |
+| **Entidades JPA** | Build { id, userId, nombre, estado, createdAt } / BuildItem { id, buildId, productId, cantidad } |
+| **Endpoints REST** | CRUD de builds y gestión de componentes dentro de una configuración. |
+| **Comunica con** | Consulta product-service, compatibility-service y provider-service para construir y validar builds. |
+| **Base de datos** | db_builds |
 
-| MS-09 · order-service  (puerto :8088) |  |
+---
+
+| MS-09 · estimate-service (puerto :8088) | |
 | :---- | :---- |
-| **Responsabilidad** | Orquesta la creacion, seguimiento y gestion del ciclo de vida de las ordenes de compra. |
-| **Entidades JPA** | Order { id, userId, estado (PENDIENTE/PROCESANDO/DESPACHADO/ENTREGADO/CANCELADO), total, createdAt } OrderItem { id, orderId, productId, nombreProducto, cantidad, precioUnitario } @OneToMany: Order \-\> OrderItem |
-| **Endpoints REST** | POST /api/orders — crear orden desde carrito activo. GET  /api/orders — listar ordenes del cliente autenticado. GET  /api/orders/{id} — detalle de orden. PATCH /api/orders/{id}/status — actualizar estado (Admin). POST /api/orders/{id}/cancel — cancelar orden pendiente (Cliente). |
-| **Comunica con** | Consulta compatibility-service (validar compatibilidad antes de crear). Consulta inventory-service (reservar stock). Consulta user-service (email para notificacion). Llama a payment-service (procesar pago). Llama a notification-service (avisar cambio de estado). |
-| **Base de datos** | db\_orders (MySQL) — tablas: orders, order\_items. |
+| **Responsabilidad** | Calcula el costo total de una configuración de hardware basada en los componentes seleccionados. |
+| **Entidades JPA** | Estimate { id, buildId, totalPrice, currency, createdAt } |
+| **Endpoints REST** | POST /api/estimate/calculate, GET /api/estimate/{buildId} |
+| **Comunica con** | Consulta build-service y product-service para calcular el costo total. |
+| **Base de datos** | db_estimates |
 
-| MS-10 · payment-service  (puerto :8089) |  |
+---
+
+| MS-10 · recommendation-service (puerto :8089) | |
 | :---- | :---- |
-| **Responsabilidad** | Procesa los pagos asociados a ordenes de compra mediante integracion con pasarela simulada, y registra el historial de transacciones. |
-| **Entidades JPA** | Payment { id, orderId, monto, estado (PENDIENTE/APROBADO/RECHAZADO/REEMBOLSADO), metodoPago, referenciaPasarela, timestamp } Refund { id, paymentId, monto, motivo, timestamp } |
-| **Endpoints REST** | POST /api/payments — iniciar pago para una orden. GET  /api/payments/{orderId} — consultar estado de pago de una orden. POST /api/payments/{id}/refund — solicitar reembolso (Admin). GET  /api/payments — listar todas las transacciones (Admin). |
-| **Comunica con** | Es llamado por order-service al confirmar una orden. Notifica a order-service el resultado del pago para actualizar el estado. |
-| **Base de datos** | db\_payments (MySQL) — tablas: payments, refunds. |
+| **Responsabilidad** | Genera recomendaciones de componentes compatibles o mejoras para una configuración existente. |
+| **Entidades JPA** | Recommendation { id, buildId, ruleApplied, suggestedProductId, reason, createdAt } |
+| **Endpoints REST** | GET /api/recommendations/{buildId}, POST /api/recommendations/generate |
+| **Comunica con** | Consulta build-service, product-service y compatibility-service para generar recomendaciones. |
+| **Base de datos** | db_recommendations |
 
-| MS-11 · notification-service  (puerto :8090) |  |
+---
+
+| MS-11 · notification-service (puerto :8090) | |
 | :---- | :---- |
-| **Responsabilidad** | Gestiona el envio de notificaciones por correo electronico a los clientes ante eventos del sistema (cambio de estado de orden, confirmacion de pago, etc.). |
-| **Entidades JPA** | NotificationLog { id, userId, email, tipo, asunto, contenido, estado (ENVIADO/FALLIDO), timestamp } |
-| **Endpoints REST** | POST /api/notifications/send — enviar notificacion (consumido internamente por otros servicios). GET  /api/notifications/logs — historial de notificaciones (Admin). GET  /api/notifications/logs?userId={id} — historial por usuario. |
-| **Comunica con** | Es llamado por order-service al cambiar estado de orden y por payment-service al confirmar/rechazar pago. Consulta user-service para obtener el email del destinatario. |
-| **Base de datos** | db\_notifications (MySQL) — tabla: notification\_logs. |
+| **Responsabilidad** | Envía notificaciones al usuario sobre eventos del sistema (estimaciones, recomendaciones, cambios en builds). |
+| **Entidades JPA** | NotificationLog { id, userId, tipo, contenido, estado, timestamp } |
+| **Endpoints REST** | POST /api/notifications/send, GET /api/notifications/logs |
+| **Comunica con** | Es consultado por estimate-service y recommendation-service. Consulta user-service para obtener el email del destinatario. |
+| **Base de datos** | db_notifications |
 
-## **5.1 Resumen de comunicación inter-servicio**
+## 5.1 Resumen de comunicación inter-servicio
 
 | Servicio origen | Servicio destino | Motivo de la llamada |
 | ----- | ----- | ----- |
-| **order-service** | **compatibility-service** | Validar compatibilidad de items del carrito antes de crear la orden |
-| **order-service** | **inventory-service** | Reservar stock al confirmar orden / liberar al cancelar |
-| **order-service** | **payment-service** | Solicitar procesamiento del pago |
-| **order-service** | **user-service** | Obtener email y direccion del cliente |
-| **order-service** | **notification-service** | Enviar notificacion al cambiar estado de la orden |
-| **cart-service** | **product-service** | Validar existencia y obtener precio al agregar items |
-| **cart-service** | **inventory-service** | Verificar stock disponible antes de agregar al carrito |
-| **compatibility-service** | **product-service** | Obtener atributos tecnicos de cada componente a verificar |
-| **product-service** | **category-service** | Validar que la categoria del producto existe |
-| **payment-service** | **order-service** | Notificar resultado del pago para actualizar estado de la orden |
-
+| **build-service** | **product-service** | Obtener información técnica de componentes para construir configuraciones de hardware |
+| **build-service** | **compatibility-service** | Validar compatibilidad entre componentes seleccionados en la build |
+| **build-service** | **provider-service** | Consultar disponibilidad o referencias externas de componentes |
+| **estimate-service** | **build-service** | Obtener configuración completa para calcular el costo total |
+| **estimate-service** | **product-service** | Obtener precios actualizados de los componentes |
+| **recommendation-service** | **build-service** | Analizar la configuración actual del usuario para generar sugerencias |
+| **recommendation-service** | **product-service** | Obtener catálogo de componentes para generar recomendaciones |
+| **recommendation-service** | **compatibility-service** | Validar compatibilidad de recomendaciones generadas |
+| **estimate-service** | **notification-service** | Solicitar notificación al usuario cuando se genera una estimación de build |
+| **recommendation-service** | **notification-service** | Solicitar notificación de recomendaciones de mejora o compatibilidad al usuario |
+| **auth-service** | **user-service** | Asociar credenciales con perfil de usuario durante autenticación y registro |
+| **api-gateway** | **auth-service** | Validar tokens JWT en cada solicitud entrante |
+```
