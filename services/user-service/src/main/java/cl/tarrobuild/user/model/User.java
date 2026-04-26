@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -20,7 +19,4 @@ public class User {
     private String email;
     private String phone;
     private LocalDateTime createdAt;
-
-    @OneToMany(mappedBy = "user")
-    private List<Address> addresses;
 }
