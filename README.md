@@ -115,7 +115,7 @@ AUTH   USER   PRODUCT  CATEGORY  COMPAT.  PROVIDER  BUILD
                  ESTIMATE :8088
                          |
                          v
-             RECOMMENDATION :8089
+             HARDWARE ADVISOR :8089
                          |
                          v
              NOTIFICATION :8090
@@ -142,13 +142,13 @@ Estas relaciones muestran qué servicio consulta a cuál para resolver cada caso
 
 - estimate-service → product-service: obtiene precios y atributos técnicos actualizados
 
-- recommendation-service → build-service: analiza la configuración actual del usuario
+- hardware-advisor → build-service: analiza la configuración actual del usuario
 
-- recommendation-service → product-service: obtiene catálogo para generar sugerencias
+- hardware-advisor → product-service: obtiene catálogo para generar sugerencias
 
 - estimate-service → notification-service: envía notificación al usuario al generar una cotización
 
-- recommendation-service → notification-service: notifica recomendaciones relevantes generadas al usuario
+- hardware-advisor → notification-service: notifica recomendaciones relevantes generadas al usuario
 
 
 ## 4. Historias de Usuario
@@ -313,7 +313,7 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | **Responsabilidad** | Gestiona el catálogo de componentes de hardware y sus especificaciones técnicas. |
 | **Entidades JPA** | Product { id, name, description, price, categoryId, brand, model, isActive } / ProductAttribute { id, productId, attributeName, attributeValue } |
 | **Endpoints REST** | CRUD de productos y consulta de atributos técnicos. |
-| **Comunica con** | Consulta category-service para validar categorías. Es consultado por build-service, compatibility-service, recommendation-service y estimate-service para obtener datos de productos. |
+| **Comunica con** | Consulta category-service para validar categorías. Es consultado por build-service, compatibility-service, hardware-advisor y estimate-service para obtener datos de productos. |
 | **Base de datos** | db_products |
 
 ---
@@ -353,17 +353,17 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | **Responsabilidad** | Calcula el costo total de una configuración de hardware basada en los componentes seleccionados. |
 | **Entidades JPA** | Estimate { id, buildId, totalPrice, currency, createdAt } |
 | **Endpoints REST** | POST /api/estimate/calculate, GET /api/estimate/{buildId} |
-| **Comunica con** | Consulta build-service y product-service para calcular el costo total. |
+| **Comunica con** | Consulta build-service y product-service para calcular el costo total. Notifica a notification-service al generar una estimación. |
 | **Base de datos** | db_estimates |
 
 ---
 
-| MS-10 · recommendation-service (puerto :8089) | |
+| MS-10 · hardware-advisor (puerto :8089) | |
 | :---- | :---- |
 | **Responsabilidad** | Genera recomendaciones de componentes compatibles o mejoras para una configuración existente. |
 | **Entidades JPA** | Recommendation { id, buildId, ruleApplied, suggestedProductId, reason, createdAt } |
 | **Endpoints REST** | GET /api/recommendations/{buildId}, POST /api/recommendations/generate |
-| **Comunica con** | Consulta build-service, product-service y compatibility-service para generar recomendaciones. |
+| **Comunica con** | Consulta build-service, product-service y compatibility-service para generar recomendaciones. Notifica a notification-service al generar sugerencias relevantes. |
 | **Base de datos** | db_recommendations |
 
 ---
@@ -373,7 +373,7 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | **Responsabilidad** | Envía notificaciones al usuario sobre eventos del sistema (estimaciones, recomendaciones, cambios en builds). |
 | **Entidades JPA** | NotificationLog { id, userId, type, content, status, timestamp } |
 | **Endpoints REST** | POST /api/notifications/send, GET /api/notifications/logs |
-| **Comunica con** | Es consultado por estimate-service y recommendation-service. Consulta user-service para obtener el email del destinatario. |
+| **Comunica con** | Es consultado por estimate-service y hardware-advisor. Consulta user-service para obtener el email del destinatario. |
 | **Base de datos** | db_notifications |
 
 ## 5.1 Resumen de comunicación inter-servicio
@@ -385,11 +385,11 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | **build-service** | **provider-service** | Consultar disponibilidad o referencias externas de componentes |
 | **estimate-service** | **build-service** | Obtener configuración completa para calcular el costo total |
 | **estimate-service** | **product-service** | Obtener precios actualizados de los componentes |
-| **recommendation-service** | **build-service** | Analizar la configuración actual del usuario para generar sugerencias |
-| **recommendation-service** | **product-service** | Obtener catálogo de componentes para generar recomendaciones |
-| **recommendation-service** | **compatibility-service** | Validar compatibilidad de recomendaciones generadas |
 | **estimate-service** | **notification-service** | Solicitar notificación al usuario cuando se genera una estimación de build |
-| **recommendation-service** | **notification-service** | Solicitar notificación de recomendaciones de mejora o compatibilidad al usuario |
+| **hardware-advisor** | **build-service** | Analizar la configuración actual del usuario para generar sugerencias |
+| **hardware-advisor** | **product-service** | Obtener catálogo de componentes para generar recomendaciones |
+| **hardware-advisor** | **compatibility-service** | Validar compatibilidad de recomendaciones generadas |
+| **hardware-advisor** | **notification-service** | Solicitar notificación de recomendaciones de mejora o compatibilidad al usuario |
 | **auth-service** | **user-service** | Asociar credenciales con perfil de usuario durante autenticación y registro |
 | **api-gateway** | **auth-service** | Validar tokens JWT en cada solicitud entrante |
 ```
