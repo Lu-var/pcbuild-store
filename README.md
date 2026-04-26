@@ -301,7 +301,7 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | MS-04 · category-service (puerto :8084) | |
 | :---- | :---- |
 | **Responsabilidad** | Administra categorías de productos y sus atributos técnicos asociados. |
-| **Entidades JPA** | Category { id, nombre, slug, descripcion, activa } / AttributeDefinition { id, categoryId, nombreAtributo, tipoDato, requerido } |
+| **Entidades JPA** | Category { id, name, slug, description, isActive } / AttributeDefinition { id, categoryId, attributeName, valueType, isRequired } |
 | **Endpoints REST** | CRUD de categorías y atributos técnicos. |
 | **Comunica con** | Es consultado por product-service para validar que una categoría existe. |
 | **Base de datos** | db_categories |
@@ -311,7 +311,7 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | MS-05 · product-service (puerto :8083) | |
 | :---- | :---- |
 | **Responsabilidad** | Gestiona el catálogo de componentes de hardware y sus especificaciones técnicas. |
-| **Entidades JPA** | Product { id, nombre, descripcion, precio, categoriaId, marca, modelo, activo } / ProductAttribute { id, productId, nombreAtributo, valor } |
+| **Entidades JPA** | Product { id, name, description, price, categoryId, brand, model, isActive } / ProductAttribute { id, productId, attributeName, attributeValue } |
 | **Endpoints REST** | CRUD de productos y consulta de atributos técnicos. |
 | **Comunica con** | Consulta category-service para validar categorías. Es consultado por build-service, compatibility-service, recommendation-service y estimate-service para obtener datos de productos. |
 | **Base de datos** | db_products |
@@ -321,7 +321,7 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | MS-06 · compatibility-service (puerto :8085) | |
 | :---- | :---- |
 | **Responsabilidad** | Valida compatibilidad técnica entre componentes de hardware basándose en reglas definidas. |
-| **Entidades JPA** | CompatibilityRule { id, categoryA, atributoA, operador, categoryB, atributoB, descripcionError } / CompatibilityCheck { id, productIds, resultado, detalle } |
+| **Entidades JPA** | CompatibilityRule { id, sourceCategory, sourceAttributeName, operator, targetCategory, targetAttributeName, incompatibilityReason } / CompatibilityCheck { id, productIds, result, details } |
 | **Endpoints REST** | POST /api/compatibility/check, CRUD de reglas de compatibilidad. |
 | **Comunica con** | Consulta product-service para obtener atributos técnicos. |
 | **Base de datos** | db_compatibility |
@@ -331,7 +331,7 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | MS-07 · provider-service (puerto :8086) | |
 | :---- | :---- |
 | **Responsabilidad** | Gestiona proveedores externos o referencias de mercado de componentes. |
-| **Entidades JPA** | Provider { id, nombre, contacto, sitioWeb, activo } / ProviderProduct { id, providerId, productId, referenciaExterna } |
+| **Entidades JPA** | Provider { id, name, contact, website, isActive } / ProviderProduct { id, providerId, productId, externalReference } |
 | **Endpoints REST** | CRUD de proveedores y consulta de referencias externas. |
 | **Comunica con** | Es consultado por build-service para entregar referencias externas de componentes. |
 | **Base de datos** | db_providers |
@@ -341,7 +341,7 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | MS-08 · build-service (puerto :8087) | |
 | :---- | :---- |
 | **Responsabilidad** | Núcleo del sistema. Gestiona configuraciones de hardware creadas por el usuario (builds). |
-| **Entidades JPA** | Build { id, userId, nombre, estado, createdAt } / BuildItem { id, buildId, productId, cantidad } |
+| **Entidades JPA** | Build { id, userId, name, status, createdAt } / BuildItem { id, buildId, productId, quantity } |
 | **Endpoints REST** | CRUD de builds y gestión de componentes dentro de una configuración. |
 | **Comunica con** | Consulta product-service, compatibility-service y provider-service para construir y validar builds. |
 | **Base de datos** | db_builds |
@@ -371,7 +371,7 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | MS-11 · notification-service (puerto :8090) | |
 | :---- | :---- |
 | **Responsabilidad** | Envía notificaciones al usuario sobre eventos del sistema (estimaciones, recomendaciones, cambios en builds). |
-| **Entidades JPA** | NotificationLog { id, userId, tipo, contenido, estado, timestamp } |
+| **Entidades JPA** | NotificationLog { id, userId, type, content, status, timestamp } |
 | **Endpoints REST** | POST /api/notifications/send, GET /api/notifications/logs |
 | **Comunica con** | Es consultado por estimate-service y recommendation-service. Consulta user-service para obtener el email del destinatario. |
 | **Base de datos** | db_notifications |
