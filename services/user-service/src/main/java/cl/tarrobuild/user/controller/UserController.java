@@ -32,6 +32,20 @@ public class UserController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("phone/{phone}")
+    public ResponseEntity<UserResponse> getUserByPhone(@PathVariable String phone) {
+        return userService.getUserByPhone(phone)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<UserResponse> createUser(@RequestBody UserRequest user) {
         UserResponse created = userService.createUser(user);
