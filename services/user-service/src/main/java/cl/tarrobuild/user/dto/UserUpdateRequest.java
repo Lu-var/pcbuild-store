@@ -13,13 +13,11 @@ import lombok.Setter;
 public class UserUpdateRequest {
     private String name;
     private String lastName;
-    private String email;
     private String phone;
 
     public UserUpdateRequest(User user) {
         this.name = user.getName();
         this.lastName = user.getLastName();
-        this.email = user.getEmail();
         this.phone = user.getPhone();
     }
 }
