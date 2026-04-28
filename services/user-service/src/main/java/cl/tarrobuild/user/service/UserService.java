@@ -32,6 +32,23 @@ public class UserService {
                 .map(this::toResponse);
     }
 
+    public List<UserResponse> getUsers(Optional<String> name, Optional<String> lastName){
+        List<User> users;
+        if (name.isPresent() && lastName.isPresent()){
+            users = userRepository.findByNameAndLastName(name.get(), lastName.get());
+        } else if (name.isPresent()) {
+            users = userRepository.findByName(name.get());
+        } else if (lastName.isPresent()) {
+             users = userRepository.findByLastName(lastName.get());
+        } else {
+            users = userRepository.findAll();
+        }
+
+        return users.stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     public Optional<UserResponse> getUserByEmail(String email) {
         return userRepository
                 .findByEmail(email)
