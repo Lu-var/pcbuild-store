@@ -51,15 +51,16 @@ public class UserService {
                 .toList();
     }
 
-    public UserResponse createUser(UserRequest createDTO) {
+    public UserResponse createUser(UserRequest request) {
+        if (userRepository.existsByEmail(request.email())) {
+            throw new IllegalArgumentException("Email: \"" + request.email() + "\" already exists");
+        }
         User user = new User();
-        user.setName(createDTO.getName());
-        user.setLastName(createDTO.getLastName());
-        user.setEmail(createDTO.getEmail());
-        user.setPhone(createDTO.getPhone());
-
+        user.setName(request.name());
+        user.setLastName(request.lastName());
+        user.setEmail(request.email());
+        user.setPhone(request.phone());
         user.setCreatedAt(LocalDateTime.now());
-
         User saved = userRepository.save(user);
 
         return this.toResponse(saved);
