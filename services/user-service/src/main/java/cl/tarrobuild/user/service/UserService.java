@@ -20,6 +20,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    private UserResponse toResponse(User user){
+        return new UserResponse(
+                user.getId(), user.getName(), user.getLastName(),
+                user.getEmail(), user.getPhone(), user.getCreatedAt());
+    }
+
     public Optional<UserResponse> getUserById(Long id) {
         return userRepository
                 .findById(id)
