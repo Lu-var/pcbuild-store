@@ -29,25 +29,25 @@ public class UserService {
     public Optional<UserResponse> getUserById(Long id) {
         return userRepository
                 .findById(id)
-                .map(UserResponse::new);
+                .map(this::toResponse);
     }
 
     public Optional<UserResponse> getUserByEmail(String email) {
         return userRepository
                 .findByEmail(email)
-                .map(UserResponse::new);
+                .map(this::toResponse);
     }
 
     public Optional<UserResponse> getUserByPhone(String phone) {
         return userRepository
                 .findByPhone(phone)
-                .map(UserResponse::new);
+                .map(this::toResponse);
     }
 
     public List<UserResponse> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(UserResponse::new)
+                .map(this::toResponse)
                 .toList();
     }
 
@@ -62,18 +62,17 @@ public class UserService {
 
         User saved = userRepository.save(user);
 
-        return new UserResponse(saved);
+        return this.toResponse(saved);
     }
 
     public Optional<UserResponse> updateUser(Long id, UserUpdateRequest userData) {
         return userRepository.findById(id)
-                .map(user -> {
-                    user.setName(userData.getName());
-                    user.setLastName(userData.getLastName());
-                    user.setPhone(userData.getPhone());
-                    User saved = userRepository.save(user);
-                    return new UserResponse(saved);
-                });
+        .map(user ->{
+           user.setName(userData.name());
+           user.setLastName(userData.lastName());
+           user.setPhone(userData.phone());
+           return toResponse(user);
+        });
     }
 
     public void deleteUser(Long id) {
