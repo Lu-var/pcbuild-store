@@ -22,7 +22,9 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserResponse>> getUsers(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "last_name", required = false) String lastName){
+    public ResponseEntity<List<UserResponse>> getUsers(
+            @RequestParam(value = "name", required = false) String name,
+            @RequestParam(value = "last_name", required = false) String lastName) {
         return ResponseEntity.ok(userService.getUsers(name, lastName));
     }
 
