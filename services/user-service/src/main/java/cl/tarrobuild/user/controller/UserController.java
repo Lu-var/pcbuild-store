@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -23,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<UserResponse>> getUsers(@RequestParam Optional<String> name, @RequestParam Optional<String> lastName){
+    public ResponseEntity<List<UserResponse>> getUsers(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "last_name", required = false) String lastName){
         return ResponseEntity.ok(userService.getUsers(name, lastName));
     }
 

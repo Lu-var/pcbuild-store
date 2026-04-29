@@ -32,14 +32,14 @@ public class UserService {
                 .map(this::toResponse);
     }
 
-    public List<UserResponse> getUsers(Optional<String> name, Optional<String> lastName){
+    public List<UserResponse> getUsers(String name, String lastName){
         List<User> users;
-        if (name.isPresent() && lastName.isPresent()){
-            users = userRepository.findByNameAndLastName(name.get(), lastName.get());
-        } else if (name.isPresent()) {
-            users = userRepository.findByName(name.get());
-        } else if (lastName.isPresent()) {
-             users = userRepository.findByLastName(lastName.get());
+        if (name != null && lastName != null){
+            users = userRepository.findByNameAndLastName(name, lastName);
+        } else if (name != null) {
+            users = userRepository.findByName(name);
+        } else if (lastName != null) {
+             users = userRepository.findByLastName(lastName);
         } else {
             users = userRepository.findAll();
         }
@@ -59,13 +59,6 @@ public class UserService {
         return userRepository
                 .findByPhone(phone)
                 .map(this::toResponse);
-    }
-
-    public List<UserResponse> getAllUsers() {
-        return userRepository.findAll()
-                .stream()
-                .map(this::toResponse)
-                .toList();
     }
 
     public UserResponse createUser(UserRequest request) {
@@ -89,7 +82,8 @@ public class UserService {
            user.setName(userData.name());
            user.setLastName(userData.lastName());
            user.setPhone(userData.phone());
-           return toResponse(user);
+           User saved = userRepository.save(user);
+           return toResponse(saved);
         });
     }
 
