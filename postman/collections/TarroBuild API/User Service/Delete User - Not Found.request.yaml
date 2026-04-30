@@ -1,0 +1,15 @@
+$kind: http-request
+name: Delete User - Not Found
+description: |-
+  Attempt to delete a user id that does not exist.
+  Expected: 404 Not Found.
+method: DELETE
+url: '{{baseUrl}}/api/users/:id'
+order: 7200
+pathVariables:
+  - key: id
+    value: '9999'
+testScript: |-
+  pm.test('Status code is 404', function () {
+    pm.response.to.have.status(404);
+  });

@@ -1,0 +1,15 @@
+$kind: http-request
+name: Get User by ID - Invalid ID
+description: |-
+  Fetch a user using a non-numeric id.
+  Expected: 400 Bad Request.
+method: GET
+url: '{{baseUrl}}/api/users/:id'
+order: 2200
+pathVariables:
+  - key: id
+    value: abc
+testScript: |-
+  pm.test('Status code is 400', function () {
+    pm.response.to.have.status(400);
+  });

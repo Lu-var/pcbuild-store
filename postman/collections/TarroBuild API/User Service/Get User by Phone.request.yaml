@@ -1,0 +1,26 @@
+$kind: http-request
+name: Get User by Phone
+description: |-
+  Fetch a user by phone number.
+  Expected: 200 OK when found; 404 if missing.
+  Note: Phone is stored as a string, so keep leading zeros if needed.
+method: GET
+url: '{{baseUrl}}/api/users/phone/:phone'
+order: 4000
+pathVariables:
+  - key: phone
+    value: '123456789'
+testScript: |-
+  pm.test('Status code is 200', function () {
+    pm.response.to.have.status(200);
+  });
+
+  pm.test('Response has user fields', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.have.property('id');
+    pm.expect(json).to.have.property('name');
+    pm.expect(json).to.have.property('lastName');
+    pm.expect(json).to.have.property('email');
+    pm.expect(json).to.have.property('phone');
+    pm.expect(json).to.have.property('createdAt');
+  });

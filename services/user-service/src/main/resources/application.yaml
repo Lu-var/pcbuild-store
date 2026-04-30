@@ -19,5 +19,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+app:
+  environment: ${APP_ENV:dev}
 server:
   port: 8082
