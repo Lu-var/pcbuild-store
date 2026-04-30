@@ -1,0 +1,26 @@
+$kind: http-request
+name: Update User - Not Found
+description: |-
+  Attempt to update a user id that does not exist.
+  Expected: 404 Not Found.
+method: PUT
+url: '{{baseUrl}}/api/users/:id'
+order: 6200
+pathVariables:
+  - key: id
+    value: '9999'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Missing",
+      "lastName": "User",
+      "phone": "88888888"
+    }
+testScript: |-
+  pm.test('Status code is 404', function () {
+    pm.response.to.have.status(404);
+  });

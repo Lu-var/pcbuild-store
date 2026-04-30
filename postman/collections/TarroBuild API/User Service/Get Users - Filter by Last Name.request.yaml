@@ -1,0 +1,40 @@
+$kind: http-request
+name: Get Users - Filter by Last Name
+description: |-
+  List users filtered by last name.
+  Expected: 200 OK with an array of matches (possibly empty).
+method: GET
+url: '{{baseUrl}}/api/users'
+order: 1200
+queryParams:
+  - key: name
+    value: ''
+    description: Filter by first name
+    disabled: true
+  - key: last_name
+    value: Doe
+    description: Filter by last name
+testScript: |-
+  pm.test('Status code is 200', function () {
+    pm.response.to.have.status(200);
+  });
+
+  pm.test('Response is an array', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.be.an('array');
+  });
+
+  pm.test('Items look like UserResponse', function () {
+    const json = pm.response.json();
+    if (json.length === 0) {
+      pm.expect(json).to.have.length(0);
+      return;
+    }
+    const item = json[0];
+    pm.expect(item).to.have.property('id');
+    pm.expect(item).to.have.property('name');
+    pm.expect(item).to.have.property('lastName');
+    pm.expect(item).to.have.property('email');
+    pm.expect(item).to.have.property('phone');
+    pm.expect(item).to.have.property('createdAt');
+  });

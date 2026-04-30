@@ -1,0 +1,26 @@
+$kind: http-request
+name: Get User by Email
+description: |-
+  Fetch a user by email address.
+  Expected: 200 OK when found; 404 if missing.
+  Note: Use a URL-encoded email if it contains special chars.
+method: GET
+url: '{{baseUrl}}/api/users/email/:email'
+order: 3000
+pathVariables:
+  - key: email
+    value: john.doe@example.com
+testScript: |-
+  pm.test('Status code is 200', function () {
+    pm.response.to.have.status(200);
+  });
+
+  pm.test('Response has user fields', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.have.property('id');
+    pm.expect(json).to.have.property('name');
+    pm.expect(json).to.have.property('lastName');
+    pm.expect(json).to.have.property('email');
+    pm.expect(json).to.have.property('phone');
+    pm.expect(json).to.have.property('createdAt');
+  });

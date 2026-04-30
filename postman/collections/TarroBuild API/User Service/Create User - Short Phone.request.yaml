@@ -1,0 +1,30 @@
+$kind: http-request
+name: Create User - Short Phone
+description: |-
+  Attempt to create a user with a short phone value.
+  Expected: 400 Bad Request with ApiError.
+method: POST
+url: '{{baseUrl}}/api/users'
+order: 5700
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Short",
+      "lastName": "Phone",
+      "email": "short.phone@example.com",
+      "phone": "123"
+    }
+testScript: |-
+  pm.test('Status code is 400', function () {
+    pm.response.to.have.status(400);
+  });
+
+  pm.test('ApiError has message and timestamp', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.have.property('message');
+    pm.expect(json).to.have.property('timestamp');
+  });

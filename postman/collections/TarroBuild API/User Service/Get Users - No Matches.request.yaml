@@ -1,0 +1,29 @@
+$kind: http-request
+name: Get Users - No Matches
+description: |-
+  List users with filters that should return no matches.
+  Expected: 200 OK with an empty array.
+method: GET
+url: '{{baseUrl}}/api/users'
+order: 1400
+queryParams:
+  - key: name
+    value: NoSuchName
+    description: Filter by first name
+  - key: last_name
+    value: NoSuchLast
+    description: Filter by last name
+testScript: |-
+  pm.test('Status code is 200', function () {
+    pm.response.to.have.status(200);
+  });
+
+  pm.test('Response is an array', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.be.an('array');
+  });
+
+  pm.test('Response is empty', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.have.length(0);
+  });

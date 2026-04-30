@@ -1,0 +1,26 @@
+$kind: http-request
+name: Get User by ID
+description: |-
+  Fetch a single user by numeric id.
+  Expected: 200 OK when found; 404 if missing; 400 if id is not numeric.
+  Note: Replace id with an existing user id.
+method: GET
+url: '{{baseUrl}}/api/users/:id'
+order: 2000
+pathVariables:
+  - key: id
+    value: '1'
+testScript: |-
+  pm.test('Status code is 200', function () {
+    pm.response.to.have.status(200);
+  });
+
+  pm.test('Response has user fields', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.have.property('id');
+    pm.expect(json).to.have.property('name');
+    pm.expect(json).to.have.property('lastName');
+    pm.expect(json).to.have.property('email');
+    pm.expect(json).to.have.property('phone');
+    pm.expect(json).to.have.property('createdAt');
+  });
