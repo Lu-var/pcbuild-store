@@ -7,3 +7,8 @@
 
 #Maven
 target/
+
+#Environment variables
+.env*
+*.env
+!.env.example
