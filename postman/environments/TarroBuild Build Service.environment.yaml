@@ -1,0 +1,4 @@
+name: TarroBuild Build Service
+values:
+  - key: baseUrl
+    value: 'localhost:8087'
