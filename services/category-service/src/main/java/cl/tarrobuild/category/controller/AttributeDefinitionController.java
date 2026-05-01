@@ -1,7 +1,7 @@
-package cl.tarrobuild.categoryservice.controller;
+package cl.tarrobuild.category.controller;
 
-import com.tarrobuild.categoryservice.entity.AttributeDefinition;
-import com.tarrobuild.categoryservice.service.AttributeDefinitionService;
+import cl.tarrobuild.category.model.AttributeDefinition;
+import cl.tarrobuild.category.service.AttributeDefinitionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
