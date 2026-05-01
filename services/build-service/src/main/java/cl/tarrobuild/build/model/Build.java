@@ -21,7 +21,8 @@ public class Build {
 
     private String name;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private BuildStatus status = BuildStatus.DRAFT;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

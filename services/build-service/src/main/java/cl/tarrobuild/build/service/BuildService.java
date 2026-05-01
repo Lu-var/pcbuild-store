@@ -23,14 +23,12 @@ public class BuildService {
         this.buildRepository = buildRepository;
     }
 
-    @Transactional(readOnly = true)
     public List<BuildResponse> getBuilds() {
         return buildRepository.findAll().stream()
                 .map(this::toResponse)
                 .toList();
     }
 
-    @Transactional(readOnly = true)
     public Optional<BuildResponse> getBuildById(Long id) {
         return buildRepository.findById(id)
                 .map(this::toResponse);
@@ -46,7 +44,6 @@ public class BuildService {
         return toResponse(saved);
     }
 
-    @Transactional
     public Optional<BuildResponse> updateBuild(Long id, BuildRequest request) {
         return buildRepository.findById(id)
                 .map(build -> {
@@ -69,9 +66,9 @@ public class BuildService {
     }
 
     private BuildResponse toResponse(Build build) {
-        List<BuildItemResponse> items = build.getItems() == null
-                ? Collections.emptyList()
-                : build.getItems().stream()
+        List<BuildItemResponse> items = Optional.ofNullable(build.getItems())
+                .orElseGet(List::of)
+                .stream()
                 .map(this::toItemResponse)
                 .toList();
 
@@ -79,7 +76,7 @@ public class BuildService {
                 build.getId(),
                 build.getUserId(),
                 build.getName(),
-                build.getStatus(),
+                build.getStatus().name(),
                 build.getCreatedAt(),
                 items
         );
