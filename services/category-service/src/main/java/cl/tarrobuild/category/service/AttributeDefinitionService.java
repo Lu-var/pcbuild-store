@@ -1,8 +1,9 @@
 package cl.tarrobuild.category.service;
 
-import com.tarrobuild.categoryservice.entity.AttributeDefinition;
-import com.tarrobuild.categoryservice.entity.Category;
-import com.tarrobuild.categoryservice.repository.AttributeDefinitionRepository;
+import cl.tarrobuild.category.model.AttributeDefinition;
+import cl.tarrobuild.category.model.Category;
+import cl.tarrobuild.category.repository.AttributeDefinitionRepository;
+import cl.tarrobuild.category.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
