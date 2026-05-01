@@ -1,6 +1,6 @@
 package cl.tarrobuild.category.service;
 
-import cl.tarrobuild.category.entity.Category;
+import cl.tarrobuild.category.model.Category;
 import cl.tarrobuild.category.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
