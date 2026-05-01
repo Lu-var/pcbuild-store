@@ -1,4 +1,4 @@
-package cl.tarrobuild.categoryservice.entity;
+package cl.tarrobuild.category.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
