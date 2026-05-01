@@ -1,4 +1,4 @@
-package com.tarrobuild.categoryservice;
+package cl.tarrobuild.categoryservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,4 +11,4 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
         }
 
     }
-}
+
