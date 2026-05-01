@@ -1,4 +1,4 @@
-package cl.tarrobuild.category.entity;
+package cl.tarrobuild.category.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -26,17 +26,4 @@ public class Category {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<AttributeDefinition> attributes;
-
-    public Category() {}
-
-    public Long getId() { return id; }
-    public String getName() { return name; }
-    public String getSlug() { return slug; }
-    public String getDescription() { return description; }
-    public Boolean getIsActive() { return isActive; }
-
-    public void setName(String name) { this.name = name; }
-    public void setSlug(String slug) { this.slug = slug; }
-    public void setDescription(String description) { this.description = description; }
-    public void setIsActive(Boolean active) { isActive = active; }
 }
