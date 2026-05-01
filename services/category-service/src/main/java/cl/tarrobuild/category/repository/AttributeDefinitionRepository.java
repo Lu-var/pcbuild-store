@@ -1,4 +1,4 @@
-package cl.tarrobuild.categoryservice.repository;
+package cl.tarrobuild.category.repository;
 
 import com.tarrobuild.categoryservice.entity.AttributeDefinition;
 import org.springframework.data.jpa.repository.JpaRepository;

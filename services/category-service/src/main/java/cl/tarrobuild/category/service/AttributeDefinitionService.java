@@ -1,4 +1,4 @@
-package cl.tarrobuild.categoryservice.service;
+package cl.tarrobuild.category.service;
 
 import com.tarrobuild.categoryservice.entity.AttributeDefinition;
 import com.tarrobuild.categoryservice.entity.Category;
