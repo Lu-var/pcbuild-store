@@ -1,5 +1,4 @@
-package cl.tarrobuild.category.controller;
-
+package cl.tarrobuild.categoryservice.controller;
 
 import com.tarrobuild.categoryservice.entity.AttributeDefinition;
 import com.tarrobuild.categoryservice.service.AttributeDefinitionService;
@@ -9,32 +8,33 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-    @RestController
-    @RequestMapping("/api/categories/{categoryId}/attributes")
-    public class AttributeDefinitionController {
+@RestController
+@RequestMapping("/api/categories/{categoryId}/attributes")
+public class AttributeDefinitionController {
 
-        private final AttributeDefinitionService attributeDefinitionService;
+    private final AttributeDefinitionService attributeDefinitionService;
 
-        public AttributeDefinitionController(AttributeDefinitionService attributeDefinitionService) {
-            this.attributeDefinitionService = attributeDefinitionService;
-        }
+    public AttributeDefinitionController(AttributeDefinitionService attributeDefinitionService) {
+        this.attributeDefinitionService = attributeDefinitionService;
+    }
 
-        @PostMapping
-        public ResponseEntity<AttributeDefinition> createAttribute(
-                @PathVariable Long categoryId,
-                @RequestBody AttributeDefinition attributeDefinition) {
+    @PostMapping
+    public ResponseEntity<AttributeDefinition> createAttribute(
+            @PathVariable Long categoryId,
+            @RequestBody AttributeDefinition attributeDefinition) {
 
-            AttributeDefinition savedAttribute =
-                    attributeDefinitionService.createAttribute(categoryId, attributeDefinition);
+        return new ResponseEntity<>(
+                attributeDefinitionService.createAttribute(categoryId, attributeDefinition),
+                HttpStatus.CREATED
+        );
+    }
 
-            return new ResponseEntity<>(savedAttribute, HttpStatus.CREATED);
-        }
+    @GetMapping
+    public ResponseEntity<List<AttributeDefinition>> getAttributesByCategory(
+            @PathVariable Long categoryId) {
 
-        @GetMapping
-        public ResponseEntity<List<AttributeDefinition>> getAttributesByCategory(
-                @PathVariable Long categoryId) {
-
-            return ResponseEntity.ok(attributeDefinitionService.getAttributesByCategory(categoryId));
-        }
+        return ResponseEntity.ok(
+                attributeDefinitionService.getAttributesByCategory(categoryId)
+        );
     }
 }

@@ -1,4 +1,4 @@
-package repository;
+package cl.tarrobuild.categoryservice.repository;
 
 import com.tarrobuild.categoryservice.entity.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,6 +9,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Optional<Category> findBySlug(String slug);
 
-}
-    }
 }
