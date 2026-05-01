@@ -1,0 +1,32 @@
+$kind: http-request
+name: Update User - Invalid Body
+description: |-
+  Attempt to update with invalid body data.
+  Expected: 400 Bad Request with ApiError.
+method: PUT
+url: '{{baseUrl}}/api/users/:id'
+order: 6300
+pathVariables:
+  - key: id
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Bad",
+      "lastName": "",
+      "phone": "77777777"
+    }
+testScript: |-
+  pm.test('Status code is 400', function () {
+    pm.response.to.have.status(400);
+  });
+
+  pm.test('ApiError has message and timestamp', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.have.property('message');
+    pm.expect(json).to.have.property('timestamp');
+  });

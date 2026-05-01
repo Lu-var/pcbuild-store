@@ -1,0 +1,15 @@
+$kind: http-request
+name: Get User by Email - Not Found
+description: |-
+  Fetch a user by email that does not exist.
+  Expected: 404 Not Found.
+method: GET
+url: '{{baseUrl}}/api/users/email/:email'
+order: 3100
+pathVariables:
+  - key: email
+    value: missing.user@example.com
+testScript: |-
+  pm.test('Status code is 404', function () {
+    pm.response.to.have.status(404);
+  });

@@ -1,0 +1,37 @@
+$kind: http-request
+name: Update User
+description: |-
+  Update an existing user by id.
+  Expected: 200 OK with UserResponse when found.
+  Returns 404 if the id does not exist, 400 for validation errors.
+method: PUT
+url: '{{baseUrl}}/api/users/:id'
+order: 6000
+pathVariables:
+  - key: id
+    value: '1'
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "John",
+      "lastName": "Doe",
+      "phone": "987654321"
+    }
+testScript: |-
+  pm.test('Status code is 200', function () {
+    pm.response.to.have.status(200);
+  });
+
+  pm.test('Response has user fields', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.have.property('id');
+    pm.expect(json).to.have.property('name');
+    pm.expect(json).to.have.property('lastName');
+    pm.expect(json).to.have.property('email');
+    pm.expect(json).to.have.property('phone');
+    pm.expect(json).to.have.property('createdAt');
+  });

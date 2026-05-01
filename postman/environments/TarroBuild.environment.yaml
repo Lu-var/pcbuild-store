@@ -1,0 +1,4 @@
+name: TarroBuild
+values:
+  - key: baseUrl
+    value: 'localhost:8082'

@@ -1,0 +1,31 @@
+$kind: http-request
+name: Create User - Duplicate Email
+description: |-
+  Attempt to create a user with an email that already exists.
+  Expected: 400 Bad Request with ApiError.
+  Prereq: Run Create User - Valid A first.
+method: POST
+url: '{{baseUrl}}/api/users'
+order: 5400
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Postman",
+      "lastName": "UserDup",
+      "email": "{{userEmailA}}",
+      "phone": "44444444"
+    }
+testScript: |-
+  pm.test('Status code is 400', function () {
+    pm.response.to.have.status(400);
+  });
+
+  pm.test('ApiError has message and timestamp', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.have.property('message');
+    pm.expect(json).to.have.property('timestamp');
+  });

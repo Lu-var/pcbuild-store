@@ -1,0 +1,45 @@
+$kind: http-request
+name: Create User - Valid A
+description: |-
+  Create a user with unique email.
+  Expected: 201 Created with UserResponse.
+method: POST
+url: '{{baseUrl}}/api/users'
+order: 5100
+preRequestScript: |-
+  const timestamp = Date.now();
+  const email = `postman.usera+${timestamp}@example.com`;
+  const phone = String(timestamp).slice(-8);
+  pm.environment.set('userEmailA', email);
+  pm.environment.set('userPhoneA', phone);
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Postman",
+      "lastName": "UserA",
+      "email": "{{userEmailA}}",
+      "phone": "{{userPhoneA}}"
+    }
+testScript: |-
+  pm.test('Status code is 201', function () {
+    pm.response.to.have.status(201);
+  });
+
+  pm.test('Response has user fields', function () {
+    const json = pm.response.json();
+    pm.expect(json).to.have.property('id');
+    pm.expect(json).to.have.property('name', 'Postman');
+    pm.expect(json).to.have.property('lastName', 'UserA');
+    pm.expect(json).to.have.property('email', pm.environment.get('userEmailA'));
+    pm.expect(json).to.have.property('phone', pm.environment.get('userPhoneA'));
+    pm.expect(json).to.have.property('createdAt');
+  });
+
+  pm.test('Store user id', function () {
+    const json = pm.response.json();
+    pm.environment.set('userIdA', json.id);
+  });

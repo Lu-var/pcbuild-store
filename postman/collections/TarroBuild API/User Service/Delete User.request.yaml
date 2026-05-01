@@ -1,0 +1,20 @@
+$kind: http-request
+name: Delete User
+description: |-
+  Delete a user by id.
+  Expected: 204 No Content when deleted.
+  Returns 404 if the id does not exist, 400 if id is not numeric.
+method: DELETE
+url: '{{baseUrl}}/api/users/:id'
+order: 7000
+pathVariables:
+  - key: id
+    value: '1'
+testScript: |-
+  pm.test('Status code is 204', function () {
+    pm.response.to.have.status(204);
+  });
+
+  pm.test('Response body is empty', function () {
+    pm.expect(pm.response.text()).to.equal('');
+  });
