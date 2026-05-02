@@ -1,6 +1,6 @@
 #Intellij IDEA
 .idea/
-*.iml
+**/*.iml
 
 #VS Code
 .vscode/
