@@ -23,18 +23,22 @@ public class BuildItemService {
         this.buildRepository = buildRepository;
     }
 
-    public List<BuildItemResponse> getAllItems() {
-        return buildItemRepository.findAll().stream()
+    public List<BuildItemResponse> getItemsByBuildId(Long buildId) {
+        if (!buildRepository.existsById(buildId)) {
+            throw new IllegalArgumentException("Build with ID " + buildId + " not found");
+        }
+        return buildItemRepository.findByBuild_Id(buildId)
+                .stream()
                 .map(this::toResponse)
                 .toList();
     }
 
-    public Optional<BuildItemResponse> getItemById(Long id) { // Renamed for clarity
-        return buildItemRepository.findById(id)
+    public Optional<BuildItemResponse> getItemByIdAndBuildId(Long itemId, Long buildId) {
+        return buildItemRepository.findByIdAndBuild_Id(itemId, buildId)
                 .map(this::toResponse);
     }
 
-    public BuildItemResponse createBuildItem(Long buildId, BuildItemRequest request) {
+    public BuildItemResponse createItem(Long buildId, BuildItemRequest request) {
         Build targetBuild = buildRepository.findById(buildId)
                 .orElseThrow(() -> new IllegalArgumentException("Build with ID " + buildId + " not found"));
 
@@ -43,18 +47,17 @@ public class BuildItemService {
         newItem.setQuantity(request.quantity());
         newItem.setBuild(targetBuild);
 
-        targetBuild.getItems().add(newItem);
-
         BuildItem saved = buildItemRepository.save(newItem);
         return toResponse(saved);
     }
 
-    public boolean deleteItem(Long id) {
-        if (!buildItemRepository.existsById(id)) {
-            return false;
-        }
-        buildItemRepository.deleteById(id);
-        return true;
+    public boolean deleteItem(Long itemId, Long buildId) {
+        return buildItemRepository.findByIdAndBuild_Id(itemId, buildId)
+                .map(item -> {
+                    buildItemRepository.delete(item);
+                    return true;
+                })
+                .orElse(false);
     }
 
     private BuildItemResponse toResponse(BuildItem item) {

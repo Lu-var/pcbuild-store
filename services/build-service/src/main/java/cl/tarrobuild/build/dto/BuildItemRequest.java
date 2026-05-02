@@ -8,7 +8,6 @@ public record BuildItemRequest(
         Long productId,
 
         @NotNull(message = "Quantity cannot be null")
+        @Size(min = 1)
         Integer quantity
-) {
-
-}
+) {}

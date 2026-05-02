@@ -20,20 +20,30 @@ public class BuildItemController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<BuildItemResponse>> getBuildItems() {
-        return ResponseEntity.ok(buildItemService.getAllItems());
+    public ResponseEntity<List<BuildItemResponse>> getItems(@PathVariable Long buildId) {
+        return ResponseEntity.ok(buildItemService.getItemsByBuildId(buildId));
     }
 
-    @GetMapping()
-    public ResponseEntity<BuildItemResponse> getBuildItemById(@PathVariable Long buildId) {
-        return buildItemService.getItemById(buildId)
+    @GetMapping("/{itemId}")
+    public ResponseEntity<BuildItemResponse> getItemById(@PathVariable Long buildId, @PathVariable Long itemId) {
+        return buildItemService.getItemByIdAndBuildId(itemId, buildId)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping()
-    public ResponseEntity<BuildItemResponse> createBuildItem(@PathVariable Long buildId, @Valid @RequestBody BuildItemRequest request) {
-        BuildItemResponse buildItemResponse = buildItemService.createBuildItem(buildId, request);
+    public ResponseEntity<BuildItemResponse> createItem(@PathVariable Long buildId, @Valid @RequestBody BuildItemRequest request) {
+        BuildItemResponse buildItemResponse = buildItemService.createItem(buildId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(buildItemResponse);
+    }
+
+    @DeleteMapping("/{itemId}")
+    public ResponseEntity<Void> deleteItem(@PathVariable Long buildId, @PathVariable Long itemId) {
+        boolean deleted = buildItemService.deleteItem(itemId, buildId);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
