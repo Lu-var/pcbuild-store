@@ -32,6 +32,18 @@ public class BuildController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<BuildResponse>> getBuildsByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(buildService.getBuildsByUserId(userId));
+    }
+
+    @GetMapping("/user/{userId}/{id}")
+    public ResponseEntity<BuildResponse> getBuildByIdAndUserId(@PathVariable Long id, @PathVariable Long userId){
+        return buildService.getBuildByIdAndUserId(id, userId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     @PostMapping
     public ResponseEntity<BuildResponse> createBuild(@Valid @RequestBody BuildRequest request) {
         BuildResponse created = buildService.createBuild(request);

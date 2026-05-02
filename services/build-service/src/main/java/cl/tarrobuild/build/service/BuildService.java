@@ -34,6 +34,17 @@ public class BuildService {
                 .map(this::toResponse);
     }
 
+    public List<BuildResponse> getBuildsByUserId(Long userId){
+        return buildRepository.findByUserId(userId).stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    public Optional<BuildResponse> getBuildByIdAndUserId(Long buildId, Long userId){
+        return buildRepository.findByIdAndUserId(buildId, userId)
+                .map(this::toResponse);
+    }
+
     public BuildResponse createBuild(BuildRequest request) {
         Build build = new Build();
         build.setUserId(request.userId());
