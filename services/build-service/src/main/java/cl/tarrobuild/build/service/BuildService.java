@@ -1,6 +1,5 @@
 package cl.tarrobuild.build.service;
 
-import cl.tarrobuild.build.dto.BuildItemRequest;
 import cl.tarrobuild.build.dto.BuildItemResponse;
 import cl.tarrobuild.build.dto.BuildRequest;
 import cl.tarrobuild.build.dto.BuildResponse;
@@ -8,9 +7,7 @@ import cl.tarrobuild.build.model.Build;
 import cl.tarrobuild.build.model.BuildItem;
 import cl.tarrobuild.build.repository.BuildRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +46,6 @@ public class BuildService {
         Build build = new Build();
         build.setUserId(request.userId());
         build.setName(request.name());
-        build.setItems(toItemEntities(request.items(), build));
 
         Build saved = buildRepository.save(build);
         return toResponse(saved);
@@ -60,9 +56,7 @@ public class BuildService {
                 .map(build -> {
                     build.setUserId(request.userId());
                     build.setName(request.name());
-                    if (request.items() != null) {
-                        build.setItems(toItemEntities(request.items(), build));
-                    }
+
                     Build saved = buildRepository.save(build);
                     return toResponse(saved);
                 });
@@ -77,46 +71,31 @@ public class BuildService {
     }
 
     private BuildResponse toResponse(Build build) {
-        List<BuildItemResponse> items = Optional.ofNullable(build.getItems())
-                .orElseGet(List::of)
-                .stream()
-                .map(this::toItemResponse)
-                .toList();
-
         return new BuildResponse(
                 build.getId(),
                 build.getUserId(),
                 build.getName(),
                 build.getStatus().name(),
                 build.getCreatedAt(),
-                items
+                toItemResponseList(build.getItems())
         );
+    }
+
+    private List<BuildItemResponse> toItemResponseList(List<BuildItem> items) {
+        return items.stream()
+                .map(this::toItemResponse)
+                .toList();
     }
 
     private BuildItemResponse toItemResponse(BuildItem item) {
-        Long buildId = item.getBuild() == null ? null : item.getBuild().getId();
         return new BuildItemResponse(
                 item.getId(),
-                buildId,
+                Optional.ofNullable(item.getBuild())
+                        .map(Build::getId)
+                        .orElse(null),
                 item.getProductId(),
                 item.getQuantity()
         );
-    }
-
-    private List<BuildItem> toItemEntities(List<BuildItemRequest> items, Build build) {
-        if (items == null) {
-            return Collections.emptyList();
-        }
-
-        return items.stream()
-                .map(request -> {
-                    BuildItem item = new BuildItem();
-                    item.setProductId(request.productId());
-                    item.setQuantity(request.quantity());
-                    item.setBuild(build);
-                    return item;
-                })
-                .toList();
     }
 }
 
