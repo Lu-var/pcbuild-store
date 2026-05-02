@@ -8,6 +8,9 @@
 #Maven
 target/
 
+#Postman
+.postman/
+
 #Environment variables
 .env*
 *.env
