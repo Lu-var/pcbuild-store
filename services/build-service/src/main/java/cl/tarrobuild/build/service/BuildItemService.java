@@ -34,9 +34,9 @@ public class BuildItemService {
                 .map(this::toResponse);
     }
 
-    public BuildItemResponse createBuildItem(BuildItemRequest request) {
-        Build targetBuild = buildRepository.findById(request.buildId())
-                .orElseThrow(() -> new IllegalArgumentException("Build with ID " + request.buildId() + " not found"));
+    public BuildItemResponse createBuildItem(Long buildId, BuildItemRequest request) {
+        Build targetBuild = buildRepository.findById(buildId)
+                .orElseThrow(() -> new IllegalArgumentException("Build with ID " + buildId + " not found"));
 
         BuildItem newItem = new BuildItem();
         newItem.setProductId(request.productId());
