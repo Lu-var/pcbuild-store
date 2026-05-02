@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "build")
+@Table(name = "builds")
 @Getter
 @Setter
 public class Build {
