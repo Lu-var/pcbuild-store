@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -33,6 +34,6 @@ public class Build {
     }
 
     @OneToMany(mappedBy = "build", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BuildItem> items;
+    private List<BuildItem> items = new ArrayList<>();
 
 }

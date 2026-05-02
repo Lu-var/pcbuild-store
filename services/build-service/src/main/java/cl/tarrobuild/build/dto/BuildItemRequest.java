@@ -4,9 +4,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record BuildItemRequest(
-        @NotNull(message = "Build ID cannot be null")
-        Long buildId,
-
         @NotNull(message = "Product ID cannot be null")
         Long productId,
 
