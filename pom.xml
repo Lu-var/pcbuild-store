@@ -52,6 +52,13 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- Force Bouncy Castle upgrade to fix CVE-2026-0636 -->
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk18on</artifactId>
+                <version>1.84</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
