@@ -14,7 +14,6 @@
     </parent>
 
     <artifactId>api-gateway</artifactId>
-    <name>api-gateway</name>
 
     <dependencies>
 
