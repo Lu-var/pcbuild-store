@@ -5,10 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "build")
+@Table(name = "builds")
 @Getter
 @Setter
 public class Build {
@@ -21,7 +22,8 @@ public class Build {
 
     private String name;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private BuildStatus status = BuildStatus.DRAFT;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -32,6 +34,6 @@ public class Build {
     }
 
     @OneToMany(mappedBy = "build", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<BuildItem> items;
+    private List<BuildItem> items = new ArrayList<>();
 
 }
