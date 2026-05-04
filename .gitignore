@@ -1,9 +1,17 @@
 #Intellij IDEA
 .idea/
-*.iml
+**/*.iml
 
 #VS Code
 .vscode/
 
 #Maven
 target/
+
+#Postman
+.postman/
+
+#Environment variables
+.env*
+*.env
+!.env.example

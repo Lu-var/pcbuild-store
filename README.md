@@ -364,7 +364,7 @@ A continuacion se define cada uno de los 11 microservicios del sistema TarroBuil
 | **Entidades JPA** | Recommendation { id, buildId, ruleApplied, suggestedProductId, reason, createdAt } |
 | **Endpoints REST** | GET /api/recommendations/{buildId}, POST /api/recommendations/generate |
 | **Comunica con** | Consulta build-service, product-service y compatibility-service para generar recomendaciones. Notifica a notification-service al generar sugerencias relevantes. |
-| **Base de datos** | db_recommendations |
+| **Base de datos** | db_advisor |
 
 ---
 
