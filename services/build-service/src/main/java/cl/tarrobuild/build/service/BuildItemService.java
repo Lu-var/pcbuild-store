@@ -36,10 +36,11 @@ public class BuildItemService {
                 .toList();
     }
 
-    public Optional<BuildItemResponse> getItemByIdAndBuildId(Long itemId, Long buildId) {
+    public BuildItemResponse getItemByIdAndBuildId(Long itemId, Long buildId) {
         log.info("Getting item with ID {} for buildId: {}", itemId, buildId);
         return buildItemRepository.findByIdAndBuild_Id(itemId, buildId)
-                .map(this::toResponse);
+                .map(this::toResponse)
+                .orElseThrow(() -> new EntityNotFoundException("Item with ID " + itemId + " not found for build " + buildId));
     }
 
     public BuildItemResponse createItem(Long buildId, BuildItemRequest request) {
@@ -57,14 +58,11 @@ public class BuildItemService {
         return toResponse(saved);
     }
 
-    public boolean deleteItem(Long itemId, Long buildId) {
+    public void deleteItem(Long itemId, Long buildId) {
         log.info("Deleting item with ID {} for buildId: {}", itemId, buildId);
-        return buildItemRepository.findByIdAndBuild_Id(itemId, buildId)
-                .map(item -> {
-                    buildItemRepository.delete(item);
-                    return true;
-                })
-                .orElse(false);
+        BuildItem item = buildItemRepository.findByIdAndBuild_Id(itemId, buildId)
+                .orElseThrow(() -> new EntityNotFoundException("Item with ID " + itemId + " not found for build " + buildId));
+        buildItemRepository.delete(item);
     }
 
     private BuildItemResponse toResponse(BuildItem item) {

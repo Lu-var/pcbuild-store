@@ -5,6 +5,7 @@ import cl.tarrobuild.user.dto.UserUpdateRequest;
 import cl.tarrobuild.user.dto.UserResponse;
 import cl.tarrobuild.user.model.User;
 import cl.tarrobuild.user.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -26,10 +27,11 @@ public class UserService {
                 user.getEmail(), user.getPhone(), user.getCreatedAt());
     }
 
-    public Optional<UserResponse> getUserById(Long id) {
+    public UserResponse getUserById(Long id) {
         return userRepository
                 .findById(id)
-                .map(this::toResponse);
+                .map(this::toResponse)
+                .orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " not found"));
     }
 
     public List<UserResponse> getUsers(String name, String lastName){
@@ -49,16 +51,18 @@ public class UserService {
                 .toList();
     }
 
-    public Optional<UserResponse> getUserByEmail(String email) {
+    public UserResponse getUserByEmail(String email) {
         return userRepository
                 .findByEmail(email)
-                .map(this::toResponse);
+                .map(this::toResponse)
+                .orElseThrow(() -> new EntityNotFoundException("User with email " + email + " not found"));
     }
 
-    public Optional<UserResponse> getUserByPhone(String phone) {
+    public UserResponse getUserByPhone(String phone) {
         return userRepository
                 .findByPhone(phone)
-                .map(this::toResponse);
+                .map(this::toResponse)
+                .orElseThrow(() -> new EntityNotFoundException("User with phone " + phone + " not found"));
     }
 
     public UserResponse createUser(UserRequest request) {
@@ -76,22 +80,22 @@ public class UserService {
         return this.toResponse(saved);
     }
 
-    public Optional<UserResponse> updateUser(Long id, UserUpdateRequest userData) {
+    public UserResponse updateUser(Long id, UserUpdateRequest userData) {
         return userRepository.findById(id)
-        .map(user ->{
-           user.setName(userData.name());
-           user.setLastName(userData.lastName());
-           user.setPhone(userData.phone());
-           User saved = userRepository.save(user);
-           return toResponse(saved);
-        });
+                .map(user ->{
+                    user.setName(userData.name());
+                    user.setLastName(userData.lastName());
+                    user.setPhone(userData.phone());
+                    User saved = userRepository.save(user);
+                    return toResponse(saved);
+                })
+                .orElseThrow(() -> new EntityNotFoundException("User with ID " + id + " not found"));
     }
 
-    public boolean deleteUser(Long id) {
+    public void deleteUser(Long id) {
         if (!userRepository.existsById(id)) {
-            return false;
+            throw new EntityNotFoundException("User with ID " + id + " not found");
         }
         userRepository.deleteById(id);
-        return true;
     }
 }
