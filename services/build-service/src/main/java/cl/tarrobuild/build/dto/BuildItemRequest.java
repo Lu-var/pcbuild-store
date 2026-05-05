@@ -1,5 +1,6 @@
 package cl.tarrobuild.build.dto;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -8,6 +9,6 @@ public record BuildItemRequest(
         Long productId,
 
         @NotNull(message = "Quantity cannot be null")
-        @Size(min = 1)
+        @Min(value = 1, message = "Quantity must be at least 1")
         Integer quantity
 ) {}
