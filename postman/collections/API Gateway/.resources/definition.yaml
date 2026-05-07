@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # API Gateway
+
+  Base URL: `http://localhost:8080`
+
+  Entry point for all client requests. Routes to the appropriate microservice.

@@ -1,0 +1,8 @@
+{
+  "info": {
+    "name": "Notification Service",
+    "description": "# Notification Service\n\nBase URL: `http://localhost:8090`\n\nSends email and in-app notifications to users.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": []
+}

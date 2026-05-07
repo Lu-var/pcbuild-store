@@ -1,0 +1,5 @@
+$kind: http-request
+description: Retrieves all builds belonging to a specific user by user ID.
+url: "{{build_service}}/api/builds/user/1"
+method: GET
+order: 3000

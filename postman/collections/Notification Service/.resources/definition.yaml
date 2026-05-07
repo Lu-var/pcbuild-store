@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # Notification Service
+
+  Base URL: `http://localhost:8090`
+
+  Sends email and in-app notifications to users.

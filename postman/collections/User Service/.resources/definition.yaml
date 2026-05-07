@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # User Service
+
+  Base URL: `http://localhost:8082`
+
+  Manages application users. Supports CRUD operations plus search by name, email, and phone, including error/edge-case scenarios.

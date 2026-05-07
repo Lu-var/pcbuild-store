@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # Auth Service
+
+  Base URL: `http://localhost:8081`
+
+  Handles authentication and authorization.

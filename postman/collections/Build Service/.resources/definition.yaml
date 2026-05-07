@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # Build Service
+
+  Base URL: `http://localhost:8087`
+
+  Manages PC builds and their items. Supports full CRUD for both builds and build items, including error/edge-case scenarios.

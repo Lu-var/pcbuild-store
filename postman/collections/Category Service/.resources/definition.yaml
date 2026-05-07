@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # Category Service
+
+  Base URL: `http://localhost:8084`
+
+  Manages product categories.
