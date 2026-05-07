@@ -4,6 +4,7 @@ import cl.tarrobuild.category.model.AttributeDefinition;
 import cl.tarrobuild.category.model.Category;
 import cl.tarrobuild.category.repository.AttributeDefinitionRepository;
 import cl.tarrobuild.category.repository.CategoryRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class AttributeDefinitionService {
 
     public AttributeDefinition createAttribute(Long categoryId, AttributeDefinition attributeDefinition) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
         attributeDefinition.setCategory(category);
         return attributeDefinitionRepository.save(attributeDefinition);
@@ -30,7 +31,7 @@ public class AttributeDefinitionService {
 
     public List<AttributeDefinition> getAttributesByCategory(Long categoryId) {
         categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
         return attributeDefinitionRepository.findByCategoryId(categoryId);
     }

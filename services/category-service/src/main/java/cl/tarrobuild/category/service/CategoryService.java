@@ -2,6 +2,8 @@ package cl.tarrobuild.category.service;
 
 import cl.tarrobuild.category.model.Category;
 import cl.tarrobuild.category.repository.CategoryRepository;
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +19,18 @@ public class CategoryService {
 
     public Category createCategory(Category category) {
         if (categoryRepository.findBySlug(category.getSlug()).isPresent()) {
-            throw new RuntimeException("Slug already exists");
+            throw new EntityExistsException("Slug already exists");
         }
         return categoryRepository.save(category);
     }
 
     public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+        return categoryRepository.findAll().stream()
+                .toList();
     }
 
     public Category getCategoryById(Long id) {
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new EntityNotFoundException("Category not found"));
     }
 }
