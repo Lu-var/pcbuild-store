@@ -12,7 +12,6 @@ public record UserUpdateRequest(
         @Size(min = 2, max = 100, message = "Last name must be between 2 and 100 characters")
         String lastName,
 
-        @NotBlank(message = "Phone cannot be empty")
         @Size(min = 8, max = 20, message = "Phone must be between 8 and 20 characters")
         String phone
 ) {}

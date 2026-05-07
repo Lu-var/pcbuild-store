@@ -18,7 +18,6 @@ public record UserRequest(
     @Email(message = "Email must be valid")
     String email,
 
-    @NotBlank(message = "Phone cannot be empty")
     @Size(min = 8, max = 20, message = "Phone must be between 8 and 20 characters")
     String phone
 ) {}
