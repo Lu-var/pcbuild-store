@@ -27,9 +27,7 @@ public class BuildController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BuildResponse> getBuildById(@PathVariable Long id) {
-        return buildService.getBuildById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(buildService.getBuildById(id));
     }
 
     @GetMapping("/user/{userId}")
@@ -39,9 +37,7 @@ public class BuildController {
 
     @GetMapping("/user/{userId}/{id}")
     public ResponseEntity<BuildResponse> getBuildByIdAndUserId(@PathVariable Long id, @PathVariable Long userId){
-        return buildService.getBuildByIdAndUserId(id, userId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(buildService.getBuildByIdAndUserId(id, userId));
     }
 
     @PostMapping
@@ -52,17 +48,12 @@ public class BuildController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BuildResponse> updateBuild(@PathVariable Long id, @Valid @RequestBody BuildRequest request) {
-        return buildService.updateBuild(id, request)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(buildService.updateBuild(id, request));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBuild(@PathVariable Long id) {
-        boolean deleted = buildService.deleteBuild(id);
-        if (!deleted) {
-            return ResponseEntity.notFound().build();
-        }
+        buildService.deleteBuild(id);
         return ResponseEntity.noContent().build();
     }
 }
