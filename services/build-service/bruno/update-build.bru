@@ -1,0 +1,18 @@
+meta {
+  name: Update Build
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{base_url}}/api/builds/1
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "userId": 1,
+    "name": "Updated Build Name"
+  }
+}

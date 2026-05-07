@@ -1,0 +1,11 @@
+meta {
+  name: Delete Build Item Not Found
+  type: http
+  seq: 16
+}
+
+delete {
+  url: {{base_url}}/api/builds/1/items/9999
+  body: none
+  auth: none
+}

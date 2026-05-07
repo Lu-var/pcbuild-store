@@ -1,0 +1,18 @@
+meta {
+  name: Create Build Item
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{base_url}}/api/builds/1/items
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "productId": 101,
+    "quantity": 1
+  }
+}
