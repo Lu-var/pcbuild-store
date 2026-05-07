@@ -1,0 +1,11 @@
+{
+  "version": "1",
+  "name": "local",
+  "variables": [
+    {
+      "name": "base_url",
+      "value": "http://localhost:8087",
+      "enabled": true
+    }
+  ]
+}
