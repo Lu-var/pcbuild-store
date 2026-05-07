@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # Provider Service
+
+  Base URL: `http://localhost:8086`
+
+  Manages hardware providers and suppliers.

@@ -1,0 +1,153 @@
+{
+  "info": {
+    "name": "User Service",
+    "description": "# User Service\n\nBase URL: `http://localhost:8082`\n\nManages application users. Supports CRUD operations plus search by name, email, and phone, including error/edge-case scenarios.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Get All Users",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{user_service}}/api/users",
+        "description": "Retrieves all users in the system."
+      }
+    },
+    {
+      "name": "Get Users By Name",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{user_service}}/api/users?name=Lucas",
+        "description": "Searches users by first name. Uses query parameter `name`."
+      }
+    },
+    {
+      "name": "Get Users By Name And Last Name",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{user_service}}/api/users?name=Lucas&last_name=Vargas",
+        "description": "Searches users by both first name and last name."
+      }
+    },
+    {
+      "name": "Get User By Id",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{user_service}}/api/users/1",
+        "description": "Retrieves a single user by ID. Returns 404 if not found."
+      }
+    },
+    {
+      "name": "Get User By Email",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{user_service}}/api/users/email/lucas@tarrobuild.cl",
+        "description": "Retrieves a user by their email address. Returns 404 if not found."
+      }
+    },
+    {
+      "name": "Get User By Phone",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{user_service}}/api/users/phone/+56912345678",
+        "description": "Retrieves a user by their phone number. Returns 404 if not found."
+      }
+    },
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{user_service}}/api/users",
+        "description": "Creates a new user. Required fields: `name`, `lastName`, `email`, `phone`.\n\n**Expected:** 201 Created",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Lucas\",\n  \"lastName\": \"Vargas\",\n  \"email\": \"lucas@tarrobuild.cl\",\n  \"phone\": \"+56912345678\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Create User Duplicate Email",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{user_service}}/api/users",
+        "description": "Negative test -- tries to create a user with an already-registered email.\n\n**Expected:** 409 Conflict (duplicate email)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Otro\",\n  \"lastName\": \"Usuario\",\n  \"email\": \"lucas@tarrobuild.cl\",\n  \"phone\": \"+56911111111\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Create User Invalid",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{user_service}}/api/users",
+        "description": "Negative test -- sends empty name/lastName, invalid email, and too-short phone.\n\n**Expected:** 400 Bad Request (validation errors)",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"\",\n  \"lastName\": \"\",\n  \"email\": \"notanemail\",\n  \"phone\": \"1\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Update User",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "url": "{{user_service}}/api/users/1",
+        "description": "Updates an existing user's name and phone. Email is not included (not updatable).\n\n**Expected:** 200 OK",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Lucas Updated\",\n  \"lastName\": \"Vargas\",\n  \"phone\": \"+56999999999\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Delete User",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{user_service}}/api/users/1",
+        "description": "Deletes a user by ID.\n\n**Expected:** 204 No Content"
+      }
+    },
+    {
+      "name": "Delete User Not Found",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": "{{user_service}}/api/users/9999",
+        "description": "Negative test -- tries to delete a non-existent user.\n\n**Expected:** 404 Not Found"
+      }
+    }
+  ]
+}

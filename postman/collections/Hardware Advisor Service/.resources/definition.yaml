@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # Hardware Advisor Service
+
+  Base URL: `http://localhost:8089`
+
+  Provides hardware recommendations and suggestions.

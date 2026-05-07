@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # Estimate Service
+
+  Base URL: `http://localhost:8088`
+
+  Calculates pricing estimates for builds.
