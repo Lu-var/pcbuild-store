@@ -20,18 +20,17 @@ public class AttributeDefinition {
     private Long id;
 
     @Column(nullable = false)
-    @Size(min = 2, max = 100, message = "Attribute name must be between 2 and 100 characters")
     private String attributeName;
 
     @Column(nullable = false)
-    private String valueType;
+    @Enumerated(EnumType.STRING)
+    private AttributeValueType valueType;
 
     @Column(nullable = false)
     private Boolean isRequired;
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    @JsonIgnore
     private Category category;
 
 }
