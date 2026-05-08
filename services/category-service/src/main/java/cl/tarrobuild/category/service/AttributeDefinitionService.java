@@ -1,5 +1,8 @@
 package cl.tarrobuild.category.service;
 
+import cl.tarrobuild.category.dto.AttributeDefinitionRequest;
+import cl.tarrobuild.category.dto.AttributeDefinitionResponse;
+import cl.tarrobuild.category.dto.CategoryResponse;
 import cl.tarrobuild.category.model.AttributeDefinition;
 import cl.tarrobuild.category.model.Category;
 import cl.tarrobuild.category.repository.AttributeDefinitionRepository;
@@ -21,18 +24,50 @@ public class AttributeDefinitionService {
         this.categoryRepository = categoryRepository;
     }
 
-    public AttributeDefinition createAttribute(Long categoryId, AttributeDefinition attributeDefinition) {
+    public AttributeDefinitionResponse createAttribute(Long categoryId, AttributeDefinitionRequest request) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+        AttributeDefinition newDefinition = new AttributeDefinition();
+        newDefinition.setAttributeName(request.attributeName());
+        newDefinition.setValueType(request.valueType());
+        newDefinition.setIsRequired(request.isRequired());
+        newDefinition.setCategory(category);
 
-        attributeDefinition.setCategory(category);
-        return attributeDefinitionRepository.save(attributeDefinition);
+        AttributeDefinition saved = attributeDefinitionRepository.save(newDefinition);
+        return toResponse(saved);
     }
 
-    public List<AttributeDefinition> getAttributesByCategory(Long categoryId) {
+    public List<AttributeDefinitionResponse> getAttributesByCategory(Long categoryId) {
         categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
 
-        return attributeDefinitionRepository.findByCategoryId(categoryId);
+        return attributeDefinitionRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
+    public AttributeDefinitionResponse toResponse(AttributeDefinition attributeDefinition) {
+        return new AttributeDefinitionResponse(
+                attributeDefinition.getId(),
+                attributeDefinition.getAttributeName(),
+                attributeDefinition.getValueType(),
+                attributeDefinition.getIsRequired(),
+                attributeDefinition.getCategory().getId()
+        );
+    }
+
+    public CategoryResponse categoryToResponse(Category category){
+        return new CategoryResponse(
+                category.getId(),
+                category.getName(),
+                category.getSlug(),
+                category.getDescription(),
+                category.getIsActive(),
+                category.getAttributes()
+                        .stream()
+                        .map(this::toResponse)
+                        .toList()
+        );
     }
 }

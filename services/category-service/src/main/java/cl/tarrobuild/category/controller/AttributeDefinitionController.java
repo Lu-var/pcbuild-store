@@ -1,7 +1,10 @@
 package cl.tarrobuild.category.controller;
 
+import cl.tarrobuild.category.dto.AttributeDefinitionRequest;
+import cl.tarrobuild.category.dto.AttributeDefinitionResponse;
 import cl.tarrobuild.category.model.AttributeDefinition;
 import cl.tarrobuild.category.service.AttributeDefinitionService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,18 +22,18 @@ public class AttributeDefinitionController {
     }
 
     @PostMapping
-    public ResponseEntity<AttributeDefinition> createAttribute(
+    public ResponseEntity<AttributeDefinitionResponse> createAttribute(
             @PathVariable Long categoryId,
-            @RequestBody AttributeDefinition attributeDefinition) {
+            @Valid @RequestBody AttributeDefinitionRequest request) {
 
         return new ResponseEntity<>(
-                attributeDefinitionService.createAttribute(categoryId, attributeDefinition),
+                attributeDefinitionService.createAttribute(categoryId, request),
                 HttpStatus.CREATED
         );
     }
 
     @GetMapping
-    public ResponseEntity<List<AttributeDefinition>> getAttributesByCategory(
+    public ResponseEntity<List<AttributeDefinitionResponse>> getAttributesByCategory(
             @PathVariable Long categoryId) {
 
         return ResponseEntity.ok(
