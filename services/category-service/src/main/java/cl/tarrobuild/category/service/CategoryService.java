@@ -1,5 +1,9 @@
 package cl.tarrobuild.category.service;
 
+import cl.tarrobuild.category.dto.AttributeDefinitionResponse;
+import cl.tarrobuild.category.dto.CategoryRequest;
+import cl.tarrobuild.category.dto.CategoryResponse;
+import cl.tarrobuild.category.model.AttributeDefinition;
 import cl.tarrobuild.category.model.Category;
 import cl.tarrobuild.category.repository.CategoryRepository;
 import jakarta.persistence.EntityExistsException;
@@ -17,20 +21,50 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category createCategory(Category category) {
-        if (categoryRepository.findBySlug(category.getSlug()).isPresent()) {
+    public CategoryResponse createCategory(CategoryRequest request) {
+        if (categoryRepository.findBySlug(request.slug()).isPresent()) {
             throw new EntityExistsException("Slug already exists");
         }
-        return categoryRepository.save(category);
+
+        Category newCategory = new Category();
+        newCategory.setName(request.name());
+        newCategory.setSlug(request.slug());
+        newCategory.setDescription(request.description());
+
+        Category saved = categoryRepository.save(newCategory);
+        return toResponse(saved);
     }
 
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll().stream()
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(this::toResponse)
                 .toList();
     }
 
-    public Category getCategoryById(Long id) {
+    public CategoryResponse getCategoryById(Long id) {
         return categoryRepository.findById(id)
+                .map(this::toResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Category not found"));
+    }
+
+    public CategoryResponse toResponse(Category category){
+        return new CategoryResponse(
+                category.getId(),
+                category.getName(),
+                category.getSlug(),
+                category.getDescription(),
+                category.getIsActive(),
+                category.getAttributes()
+                        .stream()
+                        .map(cat -> new AttributeDefinitionResponse(
+                                cat.getId(),
+                                cat.getAttributeName(),
+                                cat.getValueType(),
+                                cat.getIsRequired(),
+                                cat.getCategory().getId()
+                        ))
+                        .toList()
+        );
     }
 }
