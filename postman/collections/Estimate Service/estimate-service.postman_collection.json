@@ -1,0 +1,8 @@
+{
+  "info": {
+    "name": "Estimate Service",
+    "description": "# Estimate Service\n\nBase URL: `http://localhost:8088`\n\nCalculates pricing estimates for builds.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": []
+}

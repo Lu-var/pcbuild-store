@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # Compatibility Service
+
+  Base URL: `http://localhost:8085`
+
+  Validates component compatibility for PC builds.

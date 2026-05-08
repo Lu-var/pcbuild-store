@@ -1,0 +1,7 @@
+$kind: collection
+description: |-
+  # Product Service
+
+  Base URL: `http://localhost:8083`
+
+  Manages the product catalog (components, pricing, stock).

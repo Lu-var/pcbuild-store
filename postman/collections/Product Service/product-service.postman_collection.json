@@ -1,0 +1,8 @@
+{
+  "info": {
+    "name": "Product Service",
+    "description": "# Product Service\n\nBase URL: `http://localhost:8083`\n\nManages the product catalog (components, pricing, stock).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": []
+}

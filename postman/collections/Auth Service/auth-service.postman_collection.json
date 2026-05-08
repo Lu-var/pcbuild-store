@@ -1,0 +1,8 @@
+{
+  "info": {
+    "name": "Auth Service",
+    "description": "# Auth Service\n\nBase URL: `http://localhost:8081`\n\nHandles authentication and authorization.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": []
+}

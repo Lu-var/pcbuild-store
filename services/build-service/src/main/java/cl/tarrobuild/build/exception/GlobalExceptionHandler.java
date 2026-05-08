@@ -1,6 +1,6 @@
-package cl.tarrobuild.user.config;
+package cl.tarrobuild.build.exception;
 
-import cl.tarrobuild.user.model.ApiError;
+import cl.tarrobuild.build.exception.ApiError;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 

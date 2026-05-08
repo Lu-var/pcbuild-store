@@ -1,13 +1,17 @@
 package cl.tarrobuild.build.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "build_items")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class BuildItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

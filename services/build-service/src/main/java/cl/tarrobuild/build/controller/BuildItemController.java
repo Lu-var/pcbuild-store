@@ -26,9 +26,7 @@ public class BuildItemController {
 
     @GetMapping("/{itemId}")
     public ResponseEntity<BuildItemResponse> getItemById(@PathVariable Long buildId, @PathVariable Long itemId) {
-        return buildItemService.getItemByIdAndBuildId(itemId, buildId)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(buildItemService.getItemByIdAndBuildId(itemId, buildId));
     }
 
     @PostMapping()
@@ -39,11 +37,7 @@ public class BuildItemController {
 
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long buildId, @PathVariable Long itemId) {
-        boolean deleted = buildItemService.deleteItem(itemId, buildId);
-        if (deleted) {
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        buildItemService.deleteItem(itemId, buildId);
+        return ResponseEntity.noContent().build();
     }
 }
