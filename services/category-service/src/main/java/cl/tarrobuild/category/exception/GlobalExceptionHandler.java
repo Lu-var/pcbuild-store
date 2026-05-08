@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 @Slf4j
@@ -62,6 +63,15 @@ public class GlobalExceptionHandler {
 
         String details = isDevelopment() ? Arrays.toString(e.getStackTrace()) : null;
         return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ApiError(e.getMessage(), details, LocalDateTime.now().toString()));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<?> handleNoResourceFound(NoResourceFoundException e) {
+        log.warn("Resource not found: {}", e.getMessage());
+
+        String details = isDevelopment() ? Arrays.toString(e.getStackTrace()) : null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiError(e.getMessage(), details, LocalDateTime.now().toString()));
     }
 
