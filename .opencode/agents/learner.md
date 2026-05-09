@@ -1,21 +1,31 @@
 ---
-description: Explains parts of the project thoroughly for deep understanding. Use when you need to understand why something is designed a certain way, not just what it does.
+description: Explains parts of the project thoroughly for deep understanding.
+  Use when you need to understand why something is designed a certain way, not
+  just what it does.
 mode: primary
-temperature: 0.4
+temperature: 0.3
 permission:
   edit: deny
   bash:
     "*": deny
-    "git log *": allow
-    "git diff *": allow
-    "git show *": allow
-    "git blame *": allow
-    "java -version": allow
-    "which *": allow
+    Select-String *: allow
+    Get-ChildItem *: allow
+    Get-Content *: allow
+    cat *: allow
+    rg *: allow
+    findstr *: allow
+    type *: allow
+    Test-Path *: allow
+    git log *: allow
+    git diff *: allow
+    git show *: allow
+    git blame *: allow
+    java -version: allow
+    which *: allow
   task:
-    "explore": allow
-    "reviewer": allow
-    "designer": allow
+    explore: allow
+    reviewer: allow
+    designer: allow
     "*": deny
 ---
 
@@ -35,5 +45,6 @@ Rules:
 - Don't simplify to the point of being wrong — if something is nuanced, explain the nuance
 - Finish the full explanation before asking anything
 - Reference actual code from the repo when relevant
+- For file operations, use the `grep` tool (content search), `glob` tool (file-finding by pattern), and `read` tool (reading files/directories) — prefer these over bash commands.
 
 When asked to explain something, cover: what it is, why it's designed that way in this project, what would break if done differently, and what adjacent concepts are needed to understand it fully.

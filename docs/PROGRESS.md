@@ -2,9 +2,33 @@
 
 ---
 
-## Monorepo Structure
+## Monorepo
 
 - [ ] autoconfigure exclusions for api-gateway and notification-service (no JPA needed)
+- [x] Parent pom multi-module setup
+- [x] 11 service modules scaffolded
+- [x] CVE-2026-0636 Bouncy Castle fix
+- [x] spring-dotenv + .env setup
+- [x] Profile pattern established (h2/mysql)
+- [x] pluginManagement in parent pom
+- [x] Standardize application.yaml profile split across all services
+- [x] rename db_recommendations → db_advisor in hardware-advisor-service
+- [x] Fix naming inconsistency in spec doc (hardware-advisor → hardware-advisor-service)
+
+## Technical Debt
+
+- [ ] GlobalExceptionHandler: build-service missing EntityExistsException and NoResourceFoundException handlers, user-service missing NoResourceFoundException handler
+- [ ] Fix db ambiguity in spec doc (clarify H2=dev, MySQL=prod)
+
+## Cross-Service Dependencies
+
+- product-service → category-service (category validation)
+- build-service → product-service (future item validation)
+- compatibility-service → product-service (attribute lookup)
+- estimate-service → build-service + product-service (pricing)
+- hardware-advisor-service → compatibility + product + build
+- notification-service ← estimate-service + hardware-advisor-service
+- api-gateway → auth-service (JWT filter)
 
 ---
 
@@ -25,17 +49,35 @@ Notes: Spring Security + JWT + BCrypt, late stage
 ### user-service :8082
 STATUS: functional
 
-- [ ] Add handleNoResource to GlobalExceptionHandler
+- [x] CRUD endpoints
+- [x] DTO records
+- [x] GlobalExceptionHandler + ApiError (EntityNotFound, validation, generic)
+- [x] Validation annotations
+- [x] existsByEmail duplicate check
+- [x] deleteUser returns boolean
+- [x] Seed data
+- [x] Split application.yaml into profiles
+- [x] @Slf4j logging in UserService
+- [x] Phone nullable
+- [ ] Add NoResourceFoundException handler to GlobalExceptionHandler
 
 ---
 
 ### product-service :8083
 STATUS: functional
-Notes: depends on category-service, needs @OneToMany for ProductAttribute
+Notes: depends on category-service (placeholder always throws until Feign wiring)
 
-- [ ] Add category validation placeholder (throws EntityNotFoundException → 404 for invalid categoryId)
-- [ ] Fix security flaw: updateProductAttribute missing product ownership check
-- [ ] Fix security flaw: deleteProductAttribute missing product ownership check
+- [x] JPA entities (Product, ProductAttribute) — @NoArgsConstructor only, @PrePersist for defaults
+- [x] DTOs (Request/Response records)
+- [x] Repository layer
+- [x] ProductService with CRUD + attribute management
+- [x] ProductController
+- [x] GlobalExceptionHandler + ApiError (EntityNotFound, EntityExists, NoResourceFound, validation)
+- [x] @Slf4j logging
+- [x] Category validation placeholder (always throws)
+- [x] Product attribute ownership checks (update and delete use findByIdAndProductId)
+- [x] Seed data
+- [x] Profile split (h2/mysql)
 
 ---
 
@@ -43,7 +85,18 @@ Notes: depends on category-service, needs @OneToMany for ProductAttribute
 STATUS: functional
 Notes: pure CRUD, no inter-service calls
 
-- [ ] Merge AttributeDefinitionController + AttributeDefinitionService into CategoryController + CategoryService (AttributeDefinition is weak entity)
+- [x] JPA entities (Category, AttributeDefinition, AttributeValueType enum)
+- [x] DTOs (Request/Response records)
+- [x] Repository layer
+- [x] CategoryService + CategoryController
+- [x] AttributeDefinitionService + AttributeDefinitionController
+- [x] GlobalExceptionHandler + ApiError (EntityNotFound, EntityExists, NoResourceFound, validation)
+- [x] Profile split (h2/mysql)
+- [x] Seed data
+- [ ] Merge AttributeDefinitionController + AttributeDefinitionService into CategoryController + CategoryService
+- [ ] Fix Category.isActive: move field initializer to @PrePersist (inconsistent with Product pattern)
+- [ ] Add @Slf4j to CategoryService
+- [ ] Add duplicate attributeName check in createAttribute
 
 ---
 
@@ -57,18 +110,28 @@ Notes: depends on product attributes model being defined first
 STATUS: not started
 Notes: pure CRUD, no inter-service calls, fast win
 
-- [ ] Merge ProviderProduct handling into ProviderController + ProviderService (ProviderProduct is weak entity)
-
 ---
 
 ### build-service :8087
 STATUS: functional
 
-- [ ] Merge BuildItemController + BuildItemService into BuildController + BuildService (BuildItem is weak entity)
-- [ ] Set BuildStatus.DRAFT in @PrePersist, remove field initializer
-- [ ] Fix deleteBuild to return boolean instead of void
-- [ ] Add handleConflict (EntityExistsException → 409) to GlobalExceptionHandler
-- [ ] Add handleNoResource (NoResourceFoundException → 404) to GlobalExceptionHandler
+- [x] Build CRUD
+- [x] BuildItem nested CRUD (/api/builds/{buildId}/items)
+- [x] @OneToMany / @ManyToOne with orphanRemoval
+- [x] BuildStatus enum (DRAFT/VALIDATED/INCOMPATIBLE)
+- [x] DTO records with toResponse helpers
+- [x] Seed data
+- [x] Cascade delete
+- [x] @Min(1) on BuildItemRequest.quantity
+- [x] GlobalExceptionHandler + ApiError (EntityNotFound, validation, generic)
+- [x] @Slf4j on BuildService
+- [x] Profile split (h2/mysql)
+- [ ] Remove @AllArgsConstructor from Build and BuildItem (no callers, bypasses field initializers)
+- [ ] Move BuildStatus.DRAFT from field initializer to @PrePersist (defensive for any constructor)
+- [ ] Merge BuildItemController + BuildItemService into BuildController + BuildService
+- [ ] Fix deleteBuild to return boolean instead of void (currently throws EntityNotFoundException)
+- [ ] Add EntityExistsException handler (→ 409) to GlobalExceptionHandler
+- [ ] Add NoResourceFoundException handler (→ 404) to GlobalExceptionHandler
 
 ---
 
@@ -87,99 +150,3 @@ Notes: depends on compatibility + product + build, needs concrete rule logic pre
 ### notification-service :8090
 STATUS: not started
 Notes: thin service, in-memory ConcurrentHashMap, no JPA needed
-
----
-
-## Cross-Service Dependencies
-
-- product-service → category-service (category validation)
-- build-service → product-service (future item validation)
-- compatibility-service → product-service (attribute lookup)
-- estimate-service → build-service + product-service (pricing)
-- hardware-advisor-service → compatibility + product + build
-- notification-service ← estimate-service + hardware-advisor-service
-- api-gateway → auth-service (JWT filter)
-
----
-
-## Technical Debt
-
-- [ ] Standardize GlobalExceptionHandler across all services (missing handlers in build-service, user-service)
-- [ ] Add @Slf4j logging to all service layers
-- [ ] Fix db ambiguity in spec doc (clarify H2=dev, MySQL=prod)
-
----
-
-# DONE
-
-## Monorepo Structure
-
-- [x] Parent pom multi-module setup
-- [x] 11 service modules scaffolded
-- [x] CVE-2026-0636 Bouncy Castle fix
-- [x] spring-dotenv + .env setup
-- [x] Profile pattern established (h2/mysql)
-- [x] pluginManagement in parent pom
-- [x] Standardize application.yaml profile split across all services
-- [x] rename db_recommendations → db_advisor in hardware-advisor-service
-- [x] Fix naming inconsistency in spec doc (hardware-advisor → hardware-advisor-service)
-
-## Technical Debt
-
-- [x] Generate Postman collections per service
-- [x] Fix hardware-advisor-service db name (db_recommendations → db_advisor)
-
-## user-service :8082
-
-- [x] CRUD endpoints
-- [x] DTO records
-- [x] GlobalExceptionHandler + ApiError
-- [x] Validation annotations
-- [x] existsByEmail duplicate check
-- [x] deleteUser returns boolean
-- [x] Seed data
-- [x] Split application.yaml into profiles
-- [x] Add @Slf4j logging to UserService
-- [x] Make phone nullable in entity and UserRequest
-
-## build-service :8087
-
-- [x] Build CRUD
-- [x] BuildItem nested CRUD (/api/builds/{buildId}/items)
-- [x] @OneToMany / @ManyToOne relationship
-- [x] BuildStatus enum (DRAFT/VALIDATED/INCOMPATIBLE)
-- [x] DTO mapping with toResponse helpers
-- [x] Seed data
-- [x] Cascade delete via orphanRemoval
-- [x] existsById check on delete
-- [x] @Min(1) on BuildItemRequest.quantity
-- [x] GlobalExceptionHandler + ApiError
-- [x] @Slf4j on BuildService
-- [x] Profile split (h2/mysql)
-- [x] @NoArgsConstructor on Build and BuildItem
-
-## category-service :8084
-
-- [x] Define JPA entities (Category, AttributeDefinition, AttributeValueType enum)
-- [x] Define DTOs (CategoryRequest, CategoryResponse, AttributeDefinitionRequest, AttributeDefinitionResponse)
-- [x] Implement repository methods
-- [x] Create service methods (CategoryService, AttributeDefinitionService)
-- [x] Create controllers (CategoryController, AttributeDefinitionController)
-- [x] GlobalExceptionHandler + ApiError
-- [x] Split application.yaml into profiles
-- [x] Seed data
-- [ ] Add @Slf4j logging to CategoryService
-- [ ] Add duplicate check in createAttribute (prevent duplicate attributeName per category)
-
-## product-service :8083
-
-- [x] Define JPA entities (Product, ProductAttribute)
-- [x] Define DTOs (ProductRequest, ProductResponse, ProductAttributeRequest, ProductAttributeResponse)
-- [x] Implement repository methods
-- [x] Create service methods (ProductService)
-- [x] Create controller (ProductController)
-- [x] GlobalExceptionHandler + ApiError
-- [x] Split application.yaml into profiles
-- [x] Seed data
-- [x] @Slf4j logging
-- [x] @PrePersist for default isActive
