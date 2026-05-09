@@ -30,7 +30,7 @@ STATUS: functional
 ---
 
 ### product-service :8083
-STATUS: not started
+STATUS: functional
 Notes: depends on category-service, needs @OneToMany for ProductAttribute
 
 ---
@@ -38,6 +38,8 @@ Notes: depends on category-service, needs @OneToMany for ProductAttribute
 ### category-service :8084
 STATUS: functional
 Notes: pure CRUD, no inter-service calls
+
+- [ ] Merge AttributeDefinitionController + AttributeDefinitionService into CategoryController + CategoryService (AttributeDefinition is weak entity)
 
 ---
 
@@ -51,11 +53,14 @@ Notes: depends on product attributes model being defined first
 STATUS: not started
 Notes: pure CRUD, no inter-service calls, fast win
 
+- [ ] Merge ProviderProduct handling into ProviderController + ProviderService (ProviderProduct is weak entity)
+
 ---
 
 ### build-service :8087
 STATUS: functional
 
+- [ ] Merge BuildItemController + BuildItemService into BuildController + BuildService (BuildItem is weak entity)
 - [ ] Set BuildStatus.DRAFT in @PrePersist, remove field initializer
 - [ ] Fix deleteBuild to return boolean instead of void
 - [ ] Add handleConflict (EntityExistsException → 409) to GlobalExceptionHandler
@@ -159,3 +164,17 @@ Notes: thin service, in-memory ConcurrentHashMap, no JPA needed
 - [x] GlobalExceptionHandler + ApiError
 - [x] Split application.yaml into profiles
 - [x] Seed data
+- [ ] Add @Slf4j logging to CategoryService
+
+## product-service :8083
+
+- [x] Define JPA entities (Product, ProductAttribute)
+- [x] Define DTOs (ProductRequest, ProductResponse, ProductAttributeRequest, ProductAttributeResponse)
+- [x] Implement repository methods
+- [x] Create service methods (ProductService)
+- [x] Create controller (ProductController)
+- [x] GlobalExceptionHandler + ApiError
+- [x] Split application.yaml into profiles
+- [x] Seed data
+- [x] @Slf4j logging
+- [x] @PrePersist for default isActive
