@@ -8,6 +8,7 @@ import cl.tarrobuild.product.model.Product;
 import cl.tarrobuild.product.model.ProductAttribute;
 import cl.tarrobuild.product.repository.ProductAttributeRepository;
 import cl.tarrobuild.product.repository.ProductRepository;
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -146,6 +147,10 @@ public class ProductService {
         log.info("Adding attribute to product id: {}", productId);
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new EntityNotFoundException("Product with ID " + productId + " not found"));
+
+        if (productAttributeRepository.existsByAttributeNameAndProductId(request.attributeName(), productId)) {
+            throw new EntityExistsException("Attribute with name '" + request.attributeName() + "' already exists");
+        }
 
         ProductAttribute attribute = new ProductAttribute();
         attribute.setAttributeName(request.attributeName());
