@@ -165,6 +165,7 @@ Notes: thin service, in-memory ConcurrentHashMap, no JPA needed
 - [x] Split application.yaml into profiles
 - [x] Seed data
 - [ ] Add @Slf4j logging to CategoryService
+- [ ] Add duplicate check in createAttribute (prevent duplicate attributeName per category)
 
 ## product-service :8083
 
