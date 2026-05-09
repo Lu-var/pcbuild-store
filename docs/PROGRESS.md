@@ -33,6 +33,10 @@ STATUS: functional
 STATUS: functional
 Notes: depends on category-service, needs @OneToMany for ProductAttribute
 
+- [ ] Add category validation placeholder (throws EntityNotFoundException → 404 for invalid categoryId)
+- [ ] Fix security flaw: updateProductAttribute missing product ownership check
+- [ ] Fix security flaw: deleteProductAttribute missing product ownership check
+
 ---
 
 ### category-service :8084

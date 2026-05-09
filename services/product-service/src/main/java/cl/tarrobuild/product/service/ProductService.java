@@ -21,16 +21,19 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ProductAttributeRepository productAttributeRepository;
+    private final CategoryValidationService categoryValidationService;
 
     public ProductService(ProductRepository productRepository,
-                          ProductAttributeRepository productAttributeRepository) {
+                          ProductAttributeRepository productAttributeRepository,
+                          CategoryValidationService categoryValidationService) {
         this.productRepository = productRepository;
         this.productAttributeRepository = productAttributeRepository;
+        this.categoryValidationService = categoryValidationService;
     }
 
     public List<ProductResponse> getAllProducts() {
-        log.info("Getting all products");
-        return productRepository.findAll()
+        log.info("Getting all active products");
+        return productRepository.findByIsActiveTrue()
                 .stream()
                 .map(this::toResponse)
                 .toList();
@@ -70,6 +73,8 @@ public class ProductService {
     public ProductResponse createProduct(ProductRequest request) {
         log.info("Creating product \"{}\" categoryId: {}", request.name(), request.categoryId());
 
+        categoryValidationService.validateCategoryExists(request.categoryId());
+
         Product product = new Product();
         product.setName(request.name());
         product.setDescription(request.description());
@@ -85,6 +90,9 @@ public class ProductService {
 
     public ProductResponse updateProduct(Long id, ProductRequest request) {
         log.info("Updating product id: {}", id);
+
+        categoryValidationService.validateCategoryExists(request.categoryId());
+
         return productRepository.findById(id)
                 .map(product -> {
                     product.setName(request.name());
@@ -113,16 +121,28 @@ public class ProductService {
         return true;
     }
 
-    public boolean deactivateProduct(Long id) {
+    public void activateProduct(Long id) {
+        log.info("Activating product id: {}", id);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product with ID " + id + " not found"));
+
+        product.setIsActive(true);
+
+        productRepository.save(product);
+
+        log.info("Product with id: {} activated", id);
+    }
+
+    public void deactivateProduct(Long id) {
         log.info("Deactivating product id: {}", id);
-        return productRepository.findById(id)
-                .map(product -> {
-                    product.setIsActive(false);
-                    productRepository.save(product);
-                    log.info("Product with id: {} deactivated", id);
-                    return true;
-                })
-                .orElse(false);
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Product with ID " + id + " not found"));
+
+        product.setIsActive(false);
+
+        productRepository.save(product);
+
+        log.info("Product with id: {} deactivated", id);
     }
 
     // Product Attributes
@@ -186,6 +206,10 @@ public class ProductService {
     public boolean deleteProductAttribute(Long productId, Long attributeId) {
         log.info("Deleting attribute id: {} for product id: {}", attributeId, productId);
         if (!productAttributeRepository.existsById(attributeId)) {
+            return false;
+        }
+        if (!productAttributeRepository.findByIdAndProductId(attributeId, productId).isPresent()) {
+            log.warn("Attribute {} does not belong to product {}", attributeId, productId);
             return false;
         }
         productAttributeRepository.deleteById(attributeId);

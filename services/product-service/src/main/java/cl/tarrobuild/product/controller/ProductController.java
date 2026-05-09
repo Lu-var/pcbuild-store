@@ -51,7 +51,8 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<ProductResponse> createProduct(@Valid @RequestBody ProductRequest request) {
-        return new ResponseEntity<>(productService.createProduct(request), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(productService.createProduct(request));
     }
 
     @PutMapping("/{id}")
@@ -71,11 +72,14 @@ public class ProductController {
 
     @PatchMapping("/{id}/deactivate")
     public ResponseEntity<Void> deactivateProduct(@PathVariable Long id) {
-        boolean deactivated = productService.deactivateProduct(id);
-        if (deactivated) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        productService.deactivateProduct(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}/activate")
+    public ResponseEntity<Void> activateProduct(@PathVariable Long id) {
+        productService.activateProduct(id);
+        return ResponseEntity.noContent().build();
     }
 
     // Product Attributes endpoints
