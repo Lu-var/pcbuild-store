@@ -8,13 +8,15 @@ permission:
     "*": deny
   bash:
     "*": deny
-    "git status": allow
+    "git status*": allow
     "git diff *": allow
     "git log *": allow
-    "git branch *": allow
+    "git branch": allow
+    "git branch -a": allow
+    "git branch -r": allow
+    "git branch -avv": allow
+    "git branch --show-current": allow
     "git show *": allow
-    "grep *": allow
-    "find *": allow
   task:
     "*": deny
 ---

@@ -6,8 +6,7 @@ permission:
   edit: deny
   bash:
     "*": deny
-    "grep *": allow
-    "find *": allow
+    "Test-Path *": allow
 ---
 
 You are a code reviewer for the TarroBuild project.

@@ -8,6 +8,10 @@ permission:
     "*": ask
     "mvn compile": allow
     "mvn test": allow
+    "java -version": allow
+    "mvn --version": allow
+    "netstat -ano": allow
+    "Test-Path *": allow
 ---
 
 You are a backend implementor for the TarroBuild project.
