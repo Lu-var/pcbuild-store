@@ -1,6 +1,7 @@
 package cl.tarrobuild.provider.controller;
 
-import cl.tarrobuild.provider.entity.Provider;
+import cl.tarrobuild.provider.dto.ProviderRequest;
+import cl.tarrobuild.provider.dto.ProviderResponse;
 import cl.tarrobuild.provider.service.ProviderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +20,17 @@ public class ProviderController {
     }
 
     @PostMapping
-    public ResponseEntity<Provider> createProvider(
-            @RequestBody Provider provider) {
+    public ResponseEntity<ProviderResponse> createProvider(
+            @RequestBody ProviderRequest request) {
 
         return new ResponseEntity<>(
-                providerService.createProvider(provider),
+                providerService.createProvider(request),
                 HttpStatus.CREATED
         );
     }
 
     @GetMapping
-    public ResponseEntity<List<Provider>> getAllProviders() {
+    public ResponseEntity<List<ProviderResponse>> getAllProviders() {
 
         return ResponseEntity.ok(
                 providerService.getAllProviders()
@@ -37,7 +38,7 @@ public class ProviderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Provider> getProviderById(
+    public ResponseEntity<ProviderResponse> getProviderById(
             @PathVariable Long id) {
 
         return ResponseEntity.ok(
@@ -46,12 +47,12 @@ public class ProviderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Provider> updateProvider(
+    public ResponseEntity<ProviderResponse> updateProvider(
             @PathVariable Long id,
-            @RequestBody Provider provider) {
+            @RequestBody ProviderRequest request) {
 
         return ResponseEntity.ok(
-                providerService.updateProvider(id, provider)
+                providerService.updateProvider(id, request)
         );
     }
 

@@ -1,6 +1,6 @@
-package cl.tarrobuild.provider.repository;
+package cl.tarrobuild.provider.Repository;
 
-import cl.tarrobuild.provider.entity.Provider;
+import cl.tarrobuild.provider.Entity.Provider;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProviderRepository extends JpaRepository<Provider, Long> {

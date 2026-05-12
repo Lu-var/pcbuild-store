@@ -1,14 +1,6 @@
+package cl.tarrobuild.provider.dto;
 
-package cl.tarrobuild.provider.entity;
-
-
-@Entity
-@Table(name = "providers")
-public class Provider {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class ProviderRequest {
 
     private String name;
 
@@ -16,13 +8,9 @@ public class Provider {
 
     private String website;
 
-    private Boolean isActive = true;
+    private Boolean isActive;
 
-    public Provider() {
-    }
-
-    public Long getId() {
-        return id;
+    public ProviderRequest() {
     }
 
     public String getName() {
