@@ -1,21 +1,30 @@
 package cl.tarrobuild.product.service;
 
+import cl.tarrobuild.product.client.CategoryRestClient;
+import cl.tarrobuild.product.dto.CategoryClientResponse;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 
 @Service
 @Slf4j
 public class CategoryValidationService {
 
-    //Validates that a category exists.
-    //Currently a no-op placeholder — accepts all categoryIds.
-    //Logs a warning on first call to remind that real integration is pending.
+    private final CategoryRestClient categoryRestClient;
 
-    //When Feign is wired, replace the body with a remote call and
-    //throw EntityNotFoundException if the category doesn't exist.
+    public CategoryValidationService(CategoryRestClient categoryRestClient) {
+        this.categoryRestClient = categoryRestClient;
+    }
 
-    // TODO: call category-service via Feign client to verify existence
     public void validateCategoryExists(Long categoryId) {
-        log.warn("Category validation PLACEHOLDER — accepting categoryId {} without verification", categoryId);
+        try {
+            CategoryClientResponse response = categoryRestClient.getCategoryById(categoryId);
+            log.info("Category validated: id={}, name={}, slug={}",
+                    response.id(), response.name(), response.slug());
+        } catch (RestClientException e) {
+            log.warn("Category with id {} not found: {}", categoryId, e.getMessage());
+            throw new EntityNotFoundException("Category with ID " + categoryId + " not found");
+        }
     }
 }

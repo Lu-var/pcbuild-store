@@ -234,8 +234,8 @@ Test-Endpoint "POST /api/products (empty brand)" "$BASE/api/products" -Method PO
 Test-Endpoint "POST /api/products (empty model)" "$BASE/api/products" -Method POST -Body '{"name":"Test","price":100000,"categoryId":1,"brand":"Test","model":""}' -Expected 400
 Test-Endpoint "POST /api/products (empty body)" "$BASE/api/products" -Method POST -Body '{}' -Expected 400
 
-# TODO: Category validation placeholder - uncomment when implemented
-# Test-Endpoint "POST /api/products (invalid categoryId)" "$BASE/api/products" -Method POST -Body '{"name":"Test","price":100000,"categoryId":99,"brand":"Test","model":"Test"}' -Expected 404
+# Category validation via RestClient → category-service
+Test-Endpoint "POST /api/products (invalid categoryId 99)" "$BASE/api/products" -Method POST -Body '{"name":"Test","price":100000,"categoryId":99,"brand":"Test","model":"Test"}' -Expected 404
 
 # Attribute validation
 Test-Endpoint "POST /api/products/$attrProductId/attributes (empty name)" "$BASE/api/products/$attrProductId/attributes" -Method POST -Body '{"attributeName":"","attributeValue":"Test"}' -Expected 400
