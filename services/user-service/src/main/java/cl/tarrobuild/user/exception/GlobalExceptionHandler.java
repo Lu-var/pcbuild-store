@@ -1,5 +1,6 @@
 package cl.tarrobuild.user.exception;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @ControllerAdvice
 @Slf4j
@@ -55,21 +57,37 @@ public class GlobalExceptionHandler {
                 .body(new ApiError(e.getMessage(), details, LocalDateTime.now().toString()));
     }
 
+    @ExceptionHandler(EntityExistsException.class)
+    public ResponseEntity<?> handleConflict(EntityExistsException e) {
+        log.warn("Conflict: {}", e.getMessage());
+
+        String details = isDevelopment() ? Arrays.toString(e.getStackTrace()) : null;
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ApiError(e.getMessage(), details, LocalDateTime.now().toString()));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<?> handleNoResourceFound(NoResourceFoundException e) {
+        log.warn("Resource not found: {}", e.getMessage());
+
+        String details = isDevelopment() ? Arrays.toString(e.getStackTrace()) : null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ApiError(e.getMessage(), details, LocalDateTime.now().toString()));
+    }
+
     // Unused Credentials Handling
 
     // @ExceptionHandler(BadCredentialsException.class)
-    // public ResponseEntity<?> handleBadCredentials(BadCredentialsException e) {
+    // public ResponseEntity<?> handleBadCredentials(BadCredentialsException e) {}
     // log.warn("Credenciales inválidas: {}", e.getMessage());
     // return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
     // .body(new ApiError("Credenciales inválidas"));
-    // }
-    //
+
     // @ExceptionHandler(AccessDeniedException.class)
-    // public ResponseEntity<?> handleAccessDenied(AccessDeniedException e) {
+    // public ResponseEntity<?> handleAccessDenied(AccessDeniedException e) {}
     // log.warn("Acceso denegado: {}", e.getMessage());
     // return ResponseEntity.status(HttpStatus.FORBIDDEN)
     // .body(new ApiError("Acceso denegado"));
-    // }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception e) {

@@ -1,4 +1,4 @@
-package cl.tarrobuild.build.model;
+package cl.tarrobuild.product.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -6,22 +6,23 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "build_items")
+@Table(name = "product_attributes")
 @Getter
 @Setter
 @NoArgsConstructor
-public class BuildItem {
+public class ProductAttribute {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "product_id", nullable = false)
-    private Long productId;
+    @Column(nullable = false)
+    private String attributeName;
 
     @Column(nullable = false)
-    private Integer quantity;
+    private String attributeValue;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "build_id")
-    private Build build;
+    @JoinColumn(name = "product_id", nullable = false)
+    private Product product;
 }

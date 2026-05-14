@@ -1,4 +1,4 @@
-package cl.tarrobuild.build.exception;
+package cl.tarrobuild.product.exception;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;

@@ -1,4 +1,4 @@
-package cl.tarrobuild.user.exception;
+package cl.tarrobuild.product.exception;
 
 public record ApiError(
         String message,

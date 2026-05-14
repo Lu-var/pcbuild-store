@@ -78,18 +78,16 @@ public class GlobalExceptionHandler {
     // Unused Credentials Handling
 
     // @ExceptionHandler(BadCredentialsException.class)
-    // public ResponseEntity<?> handleBadCredentials(BadCredentialsException e) {
+    // public ResponseEntity<?> handleBadCredentials(BadCredentialsException e) {}
     // log.warn("Credenciales inválidas: {}", e.getMessage());
     // return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
     // .body(new ApiError("Credenciales inválidas"));
-    // }
-    //
+
     // @ExceptionHandler(AccessDeniedException.class)
-    // public ResponseEntity<?> handleAccessDenied(AccessDeniedException e) {
+    // public ResponseEntity<?> handleAccessDenied(AccessDeniedException e) {}
     // log.warn("Acceso denegado: {}", e.getMessage());
     // return ResponseEntity.status(HttpStatus.FORBIDDEN)
     // .body(new ApiError("Acceso denegado"));
-    // }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception e) {
