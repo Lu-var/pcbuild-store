@@ -1,17 +1,19 @@
 ---
-description: Implements a complete service from scratch following TarroBuild conventions. Use when building a new microservice or adding a new entity/feature to an existing one.
+description: Implements a complete service from scratch following TarroBuild
+  conventions. Use when building a new microservice or adding a new
+  entity/feature to an existing one.
 mode: primary
 temperature: 0.2
 permission:
   edit: allow
   bash:
     "*": ask
-    "mvn compile": allow
-    "mvn test": allow
-    "java -version": allow
-    "mvn --version": allow
-    "netstat -ano": allow
-    "Test-Path *": allow
+    mvn compile: allow
+    mvn test: allow
+    java -version: allow
+    mvn --version: allow
+    netstat -ano: allow
+    Test-Path *: allow
 ---
 
 You are a backend implementor for the TarroBuild project.
