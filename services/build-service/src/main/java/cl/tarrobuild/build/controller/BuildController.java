@@ -1,7 +1,5 @@
 package cl.tarrobuild.build.controller;
 
-import cl.tarrobuild.build.dto.BuildItemRequest;
-import cl.tarrobuild.build.dto.BuildItemResponse;
 import cl.tarrobuild.build.dto.BuildRequest;
 import cl.tarrobuild.build.dto.BuildResponse;
 import cl.tarrobuild.build.service.BuildService;
@@ -38,7 +36,7 @@ public class BuildController {
     }
 
     @GetMapping("/user/{userId}/{id}")
-    public ResponseEntity<BuildResponse> getBuildByIdAndUserId(@PathVariable Long id, @PathVariable Long userId) {
+    public ResponseEntity<BuildResponse> getBuildByIdAndUserId(@PathVariable Long id, @PathVariable Long userId){
         return ResponseEntity.ok(buildService.getBuildByIdAndUserId(id, userId));
     }
 
@@ -58,28 +56,5 @@ public class BuildController {
         buildService.deleteBuild(id);
         return ResponseEntity.noContent().build();
     }
-
-    @GetMapping("/{buildId}/items")
-    public ResponseEntity<List<BuildItemResponse>> getItems(@PathVariable Long buildId) {
-        return ResponseEntity.ok(buildService.getItemsByBuildId(buildId));
-    }
-
-    @GetMapping("/{buildId}/items/{itemId}")
-    public ResponseEntity<BuildItemResponse> getItemById(@PathVariable Long buildId, @PathVariable Long itemId) {
-        return ResponseEntity.ok(buildService.getItemByIdAndBuildId(itemId, buildId));
-    }
-
-    @PostMapping("/{buildId}/items")
-    public ResponseEntity<BuildItemResponse> createItem(
-            @PathVariable Long buildId,
-            @Valid @RequestBody BuildItemRequest request) {
-        BuildItemResponse created = buildService.createItem(buildId, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
-    }
-
-    @DeleteMapping("/{buildId}/items/{itemId}")
-    public ResponseEntity<Void> deleteItem(@PathVariable Long buildId, @PathVariable Long itemId) {
-        buildService.deleteItem(itemId, buildId);
-        return ResponseEntity.noContent().build();
-    }
 }
+
