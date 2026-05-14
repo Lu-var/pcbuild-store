@@ -4,7 +4,17 @@
 
 ## In Progress
 
-- **provider-service** :8086
+### provider-service :8086
+- scaffolded (Application + test class)
+
+### product-service :8083 — Wiring Feign client to category-service
+- [ ] Add `spring-cloud-starter-openfeign` dependency to `pom.xml`
+- [ ] Create `CategoryClientResponse` DTO in `cl.tarrobuild.product.dto`
+- [ ] Create `CategoryServiceFeignClient` interface in `cl.tarrobuild.product.client`
+- [ ] Add `category-service.url` property to `application.yaml`
+- [ ] Add `@EnableFeignClients` to `ProductServiceApplication.java`
+- [ ] Replace `CategoryValidationService` placeholder with real Feign call
+- [ ] Add `FeignException.NotFound` and `FeignException` handlers to `GlobalExceptionHandler`
 
 ## Done
 
@@ -15,12 +25,6 @@
 - Fixed deleteBuild to return boolean
 - Added @Slf4j to CategoryService
 - Removed JPA/H2/MySQL deps from notification-service (in-memory, no JPA needed)
-
-
-## Pending
-
-### product-service :8083
-- [ ] Wire Feign client to category-service
 
 ## Not Started
 
