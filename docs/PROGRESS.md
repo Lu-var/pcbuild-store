@@ -1,60 +1,187 @@
 # PROGRESS.md
 
----
+## Functional requirements (RF)
 
-## Done
+- [ ] **RF-01** — Register user with bcrypt
+- [ ] **RF-02** — Authenticate user (JWT)
+- [ ] **RF-03** — List catalog components
+- [ ] **RF-04** — Component detail
+- [ ] **RF-05** — Filter by category/brand/price
+- [ ] **RF-06** — Create build
+- [ ] **RF-07** — Manage build items
+- [ ] **RF-08** — Compatibility check
+- [ ] **RF-09** — Power consumption estimate
+- [ ] **RF-10** — Reference prices from providers
+- [ ] **RF-11** — Consolidated build analysis
+- [ ] **RF-12** — Save favorite builds
+- [ ] **RF-13** — Upgrade recommendations
+- [ ] **RF-14** — CRUD components/attributes
+- [ ] **RF-15** — CRUD compatibility rules
+- [ ] **RF-16** — CRUD price references
+- [ ] **RF-17** — Price/availability alerts
+- [ ] **RF-18** — Auto-notifications
 
-### Services fully implemented (Controller + Service + Repository + Model + DTOs + ExceptionHandler + seed data)
+## Non-functional requirements (RNF)
 
-| Service | Port | Files |
-|---------|------|-------|
-| **user-service** | 8082 | Full CRUD — 20 seed users |
-| **category-service** | 8084 | Full CRUD — 8 categories, ~30 attribute definitions |
-| **product-service** | 8083 | Full CRUD + product attributes + inter-service client (→ category) — 32 seed products, ~100 attributes |
-| **build-service** | 8087 | Full CRUD + build items + status enum — 5 builds, ~25 items |
+- [ ] **RNF-01** — Response < 500ms
+- [ ] **RNF-02** — Validation + semantic HTTP codes
+- [ ] **RNF-03** — Structured logs with correlation ID
+- [ ] **RNF-04** — Independent DB per service
+- [ ] **RNF-05** — REST-only inter-service communication
+- [ ] **RNF-06** — BCrypt password encryption
 
-### Newly scaffolded (basic 5-layer CSR, no inter-service wiring yet)
+## User stories (HU)
 
-| Service | Port | Files Created | Notes |
-|---------|------|---------------|-------|
-| **compatibility-service** | 8085 | 2 entities, 2 repos, 4 DTOs, 1 service, 1 controller, 2 exceptions, data.sql (5 rules) | `POST /api/compatibility/check`, CRUD `/api/compatibility/rules` |
-| **notification-service** | 8090 | 1 model (POJO), 1 enum, 1 in-memory repo, 2 DTOs, 1 service, 1 controller, 2 exceptions | `POST /api/notifications/send`, `GET /api/notifications/logs`, `GET /api/notifications/logs/user/{userId}`. In-memory — no JPA. Dead h2/mysql yamls deleted. |
-| **estimate-service** | 8088 | 1 entity, 1 repo, 2 DTOs, 1 service, 1 controller, 2 exceptions | `POST /api/estimate/calculate` (stub, totalPrice=0), `GET /api/estimate/{buildId}` |
-| **hardware-advisor-service** | 8089 | 1 entity, 1 repo, 2 DTOs, 1 service, 1 controller, 2 exceptions | `POST /api/recommendations/generate` (stub, empty list), `GET /api/recommendations/{buildId}` |
-
-### Inter-service wiring
-
-- Wired product-service → category-service via RestClient (`CategoryRestClient`, `CategoryValidationService`, `RestClientConfig`, env var config)
-
-### Infrastructure
-
-- Consolidated GlobalExceptionHandler (EntityExistsException + NoResourceFoundException) across build-service, user-service, product-service
-- Merged AttributeDefinitionController + BuildItemController into parent controllers, duplicate attributeName check
-- Cleaned up BuildItem (removed @AllArgsConstructor, deleteBuild returns boolean, @Slf4j on CategoryService)
-- Removed JPA/H2/MySQL deps from notification-service (in-memory, no JPA)
-- Deleted notification-service/src/main/resources/application-h2.yaml and application-mysql.yaml (dead configs — no JPA on classpath)
-
----
-
-## Pending — Inter-service wiring
-
-| Origin | → | Destination | Method | Needed for |
-|--------|---|------------|--------|-----------|
-| **build-service** | → | product-service | Feign | Get component technical info |
-| **build-service** | → | compatibility-service | Feign | Validate component compatibility |
-| **build-service** | → | provider-service | Feign | Query external references |
-| **estimate-service** | → | build-service | RestClient | Get full build configuration |
-| **estimate-service** | → | product-service | RestClient | Get updated prices for sum |
-| **estimate-service** | → | notification-service | RestClient | Notify user of estimate |
-| **hardware-advisor** | → | build-service | Feign | Analyze current user build |
-| **hardware-advisor** | → | product-service | Feign | Get catalog for suggestions |
-| **hardware-advisor** | → | compatibility-service | Feign | Validate recommended components |
-| **hardware-advisor** | → | notification-service | Feign | Notify recommendations |
+- [ ] **HU-01** — User registration
+- [ ] **HU-02** — Authentication
+- [ ] **HU-03** — Catalog exploration
+- [ ] **HU-04** — Build creation
+- [ ] **HU-05** — Compatibility validation
+- [ ] **HU-06** — Cost estimation
+- [ ] **HU-07** — Component recommendations
+- [ ] **HU-08** — Build history
+- [ ] **HU-09** — System notifications
+- [ ] **HU-10** — Admin catalog management
 
 ---
 
-## Not Started
+## Services
 
-- **provider-service** :8086 — scaffolded (Application + test only), needs full implementation
-- **auth-service** :8081 — advanced (JWT, Spring Security, bcrypt)
-- **api-gateway** :8080 — advanced (route proxying, JWT auth filter)
+### api-gateway :8080
+
+- [ ] Config (application.yml routes)
+- [ ] JWT auth filter
+- [ ] Route proxying setup
+- [ ] Tests
+
+### auth-service :8081
+
+- [ ] Model / Entity (Credential)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
+- [ ] BCrypt password hashing
+- [ ] JWT token generation / validation
+
+### user-service :8082
+
+- [ ] Model / Entity (User)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Seed data (data.sql)
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
+
+### category-service :8084
+
+- [ ] Model / Entity (Category, AttributeDefinition)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Seed data (data.sql)
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
+
+### product-service :8083
+
+- [ ] Model / Entity (Product, ProductAttribute)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Seed data (data.sql)
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
+- [ ] RestClient → category-service
+
+### compatibility-service :8085
+
+- [ ] Model / Entity (CompatibilityRule, CompatibilityCheck)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Seed data (data.sql)
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
+
+### provider-service :8086
+
+- [ ] Model / Entity (Provider, ProviderProduct)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Seed data (data.sql)
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
+
+### build-service :8087
+
+- [ ] Model / Entity (Build, BuildItem)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Seed data (data.sql)
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
+
+### estimate-service :8088
+
+- [ ] Model / Entity (Estimate)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Seed data (data.sql)
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
+
+### hardware-advisor :8089
+
+- [ ] Model / Entity (Recommendation)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Seed data (data.sql)
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
+
+### notification-service :8090
+
+- [ ] Model / Entity (NotificationLog)
+- [ ] Repository
+- [ ] DTOs (Request / Response)
+- [ ] Service
+- [ ] Controller
+- [ ] Exception handling
+- [ ] Seed data (data.sql)
+- [ ] Config (application.yaml + profiles)
+- [ ] Application main class
+- [ ] Tests
