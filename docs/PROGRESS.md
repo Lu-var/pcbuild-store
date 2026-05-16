@@ -89,8 +89,8 @@
 - [x] Seed data (20 users) (Module 2)
 - [x] User with unique email (Module 3)
 - [ ] Flyway migrations (Module 6)
-- [ ] Logging with `@Slf4j` (Module 8)
-- [ ] GlobalExceptionHandler (Module 9)
+- [x] Logging with `@Slf4j` (Module 8)
+- [x] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### category-service :8084
@@ -104,8 +104,8 @@
 - [x] Seed data (8 categories, ~30 attributes) (Module 2)
 - [x] `@OneToMany` Category -> AttributeDefinition (Module 3)
 - [ ] Flyway migrations (Module 6)
-- [ ] Logging with `@Slf4j` (Module 8)
-- [ ] GlobalExceptionHandler (Module 9)
+- [x] Logging with `@Slf4j` (Module 8)
+- [x] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### product-service :8083
@@ -120,8 +120,8 @@
 - [x] `@OneToMany` Product -> ProductAttribute (Module 3)
 - [x] RestClient → category-service (Module 5)
 - [ ] Flyway migrations (Module 6)
-- [ ] Logging with `@Slf4j` (Module 8)
-- [ ] GlobalExceptionHandler (Module 9)
+- [x] Logging with `@Slf4j` (Module 8)
+- [x] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### compatibility-service :8085
@@ -135,8 +135,8 @@
 - [x] Seed data (5 rules) (Module 2)
 - [ ] FeignClient → product-service (Module 5)
 - [ ] Flyway migrations (Module 6)
-- [ ] Logging with `@Slf4j` (Module 8)
-- [ ] GlobalExceptionHandler (Module 9)
+- [x] Logging with `@Slf4j` (Module 8)
+- [x] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### provider-service :8086
@@ -168,8 +168,8 @@
 - [ ] FeignClient → compatibility-service (Module 5)
 - [ ] FeignClient → provider-service (Module 5)
 - [ ] Flyway migrations (Module 6)
-- [ ] Logging with `@Slf4j` (Module 8)
-- [ ] GlobalExceptionHandler (Module 9)
+- [x] Logging with `@Slf4j` (Module 8)
+- [x] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### estimate-service :8088
@@ -180,13 +180,13 @@
 - [x] Service (Module 1)
 - [x] Controller (Module 1)
 - [x] Exception handling (Module 1)
-- [x] Seed data (Module 2)
+- [ ] Seed data (Module 2)
 - [ ] RestClient → build-service (Module 5)
 - [ ] RestClient → product-service (Module 5)
 - [ ] RestClient → notification-service (Module 5)
 - [ ] Flyway migrations (Module 6)
-- [ ] Logging with `@Slf4j` (Module 8)
-- [ ] GlobalExceptionHandler (Module 9)
+- [x] Logging with `@Slf4j` (Module 8)
+- [x] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### hardware-advisor :8089
@@ -197,14 +197,14 @@
 - [x] Service (Module 1)
 - [x] Controller (Module 1)
 - [x] Exception handling (Module 1)
-- [x] Seed data (Module 2)
+- [ ] Seed data (Module 2)
 - [ ] FeignClient → build-service (Module 5)
 - [ ] FeignClient → product-service (Module 5)
 - [ ] FeignClient → compatibility-service (Module 5)
 - [ ] FeignClient → notification-service (Module 5)
 - [ ] Flyway migrations (Module 6)
-- [ ] Logging with `@Slf4j` (Module 8)
-- [ ] GlobalExceptionHandler (Module 9)
+- [x] Logging with `@Slf4j` (Module 8)
+- [x] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### notification-service :8090
@@ -218,6 +218,6 @@
 - [ ] Migrate to JPA + database (Module 2)
 - [ ] Seed data (Module 2)
 - [ ] Flyway migrations (Module 6)
-- [ ] Logging with `@Slf4j` (Module 8)
-- [ ] GlobalExceptionHandler (Module 9)
+- [x] Logging with `@Slf4j` (Module 8)
+- [x] GlobalExceptionHandler (Module 9)
 - [ ] Tests
