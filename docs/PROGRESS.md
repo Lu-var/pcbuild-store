@@ -1,5 +1,9 @@
 # PROGRESS.md
 
+> Course module checklist: [`docs/guides/COURSE-MODULES.md`](./guides/COURSE-MODULES.md)
+
+---
+
 ## Functional requirements (RF)
 
 - [ ] **RF-01** — Register user with bcrypt
@@ -50,138 +54,170 @@
 ### api-gateway :8080
 
 - [ ] Config (application.yml routes)
-- [ ] JWT auth filter
-- [ ] Route proxying setup
+- [ ] JWT auth filter (Module 7)
+- [ ] Route proxying setup (Module 7)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### auth-service :8081
 
-- [ ] Model / Entity (Credential)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [ ] Model / Entity (Credential) (Module 2)
+- [ ] Repository (Module 2)
+- [ ] DTOs (Request / Response) (Module 1)
+- [ ] Service (Module 1)
+- [ ] Controller (Module 1)
+- [ ] Exception handling (Module 1)
+- [ ] Seed data (admin + test users) (Module 2)
+- [ ] `@OneToMany` User -> Credential (Module 3)
+- [ ] BCrypt password hashing (Module 7)
+- [ ] JWT token generation / validation (Module 7)
+- [ ] Roles: USER / ADMIN (Module 7)
+- [ ] Flyway migrations (Module 6)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
-- [ ] BCrypt password hashing
-- [ ] JWT token generation / validation
 
 ### user-service :8082
 
-- [ ] Model / Entity (User)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Seed data (data.sql)
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [x] Model / Entity (User) (Module 2)
+- [x] Repository (Module 2)
+- [x] DTOs (Request / Response) (Module 1)
+- [x] Service (Module 1)
+- [x] Controller (Module 1)
+- [x] Exception handling (Module 1)
+- [x] Seed data (20 users) (Module 2)
+- [x] User with unique email (Module 3)
+- [ ] Flyway migrations (Module 6)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### category-service :8084
 
-- [ ] Model / Entity (Category, AttributeDefinition)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Seed data (data.sql)
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [x] Model / Entity (Category, AttributeDefinition) (Module 2)
+- [x] Repository (Module 2)
+- [x] DTOs (Request / Response) (Module 1)
+- [x] Service (Module 1)
+- [x] Controller (Module 1)
+- [x] Exception handling (Module 1)
+- [x] Seed data (8 categories, ~30 attributes) (Module 2)
+- [x] `@OneToMany` Category -> AttributeDefinition (Module 3)
+- [ ] Flyway migrations (Module 6)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### product-service :8083
 
-- [ ] Model / Entity (Product, ProductAttribute)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Seed data (data.sql)
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [x] Model / Entity (Product, ProductAttribute) (Module 2)
+- [x] Repository (Module 2)
+- [x] DTOs (Request / Response) (Module 1)
+- [x] Service (Module 1)
+- [x] Controller (Module 1)
+- [x] Exception handling (Module 1)
+- [x] Seed data (32 products, ~100 attributes) (Module 2)
+- [x] `@OneToMany` Product -> ProductAttribute (Module 3)
+- [x] RestClient → category-service (Module 5)
+- [ ] Flyway migrations (Module 6)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
-- [ ] RestClient → category-service
 
 ### compatibility-service :8085
 
-- [ ] Model / Entity (CompatibilityRule, CompatibilityCheck)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Seed data (data.sql)
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [x] Model / Entity (CompatibilityRule, CompatibilityCheck) (Module 2)
+- [x] Repository (Module 2)
+- [x] DTOs (Request / Response) (Module 1)
+- [x] Service (Module 1)
+- [x] Controller (Module 1)
+- [x] Exception handling (Module 1)
+- [x] Seed data (5 rules) (Module 2)
+- [ ] FeignClient → product-service (Module 5)
+- [ ] Flyway migrations (Module 6)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### provider-service :8086
 
-- [ ] Model / Entity (Provider, ProviderProduct)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Seed data (data.sql)
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [x] Model / Entity (Provider, ProviderProduct) (Module 2)
+- [x] Repository (Module 2)
+- [x] DTOs (Request / Response) (Module 1)
+- [x] Service (Module 1)
+- [x] Controller (Module 1)
+- [x] Exception handling (Module 1)
+- [x] Seed data (4 providers) (Module 2)
+- [ ] Flyway migrations (Module 6)
+- [x] Logging with `@Slf4j` (Module 8)
+- [x] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### build-service :8087
 
-- [ ] Model / Entity (Build, BuildItem)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Seed data (data.sql)
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [x] Model / Entity (Build, BuildItem) (Module 2)
+- [x] Repository (Module 2)
+- [x] DTOs (Request / Response) (Module 1)
+- [x] Service (Module 1)
+- [x] Controller (Module 1)
+- [x] Exception handling (Module 1)
+- [x] Seed data (5 builds, ~25 items) (Module 2)
+- [x] `@OneToMany` Build -> BuildItem (Module 3)
+- [ ] PATCH /api/builds/{id}/status for partial updates (Module 3)
+- [ ] FeignClient → product-service (Module 5)
+- [ ] FeignClient → compatibility-service (Module 5)
+- [ ] FeignClient → provider-service (Module 5)
+- [ ] Flyway migrations (Module 6)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### estimate-service :8088
 
-- [ ] Model / Entity (Estimate)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Seed data (data.sql)
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [x] Model / Entity (Estimate) (Module 2)
+- [x] Repository (Module 2)
+- [x] DTOs (Request / Response) (Module 1)
+- [x] Service (Module 1)
+- [x] Controller (Module 1)
+- [x] Exception handling (Module 1)
+- [x] Seed data (Module 2)
+- [ ] RestClient → build-service (Module 5)
+- [ ] RestClient → product-service (Module 5)
+- [ ] RestClient → notification-service (Module 5)
+- [ ] Flyway migrations (Module 6)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### hardware-advisor :8089
 
-- [ ] Model / Entity (Recommendation)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Seed data (data.sql)
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [x] Model / Entity (Recommendation) (Module 2)
+- [x] Repository (Module 2)
+- [x] DTOs (Request / Response) (Module 1)
+- [x] Service (Module 1)
+- [x] Controller (Module 1)
+- [x] Exception handling (Module 1)
+- [x] Seed data (Module 2)
+- [ ] FeignClient → build-service (Module 5)
+- [ ] FeignClient → product-service (Module 5)
+- [ ] FeignClient → compatibility-service (Module 5)
+- [ ] FeignClient → notification-service (Module 5)
+- [ ] Flyway migrations (Module 6)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
 
 ### notification-service :8090
 
-- [ ] Model / Entity (NotificationLog)
-- [ ] Repository
-- [ ] DTOs (Request / Response)
-- [ ] Service
-- [ ] Controller
-- [ ] Exception handling
-- [ ] Seed data (data.sql)
-- [ ] Config (application.yaml + profiles)
-- [ ] Application main class
+- [x] Model / Entity (NotificationLog) (Module 2)
+- [x] Repository (in-memory, pre-JPA) (Module 1)
+- [x] DTOs (Request / Response) (Module 1)
+- [x] Service (Module 1)
+- [x] Controller (Module 1)
+- [x] Exception handling (Module 1)
+- [ ] Migrate to JPA + database (Module 2)
+- [ ] Seed data (Module 2)
+- [ ] Flyway migrations (Module 6)
+- [ ] Logging with `@Slf4j` (Module 8)
+- [ ] GlobalExceptionHandler (Module 9)
 - [ ] Tests
