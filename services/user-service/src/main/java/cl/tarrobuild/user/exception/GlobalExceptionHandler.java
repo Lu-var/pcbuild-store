@@ -10,6 +10,7 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -75,19 +76,13 @@ public class GlobalExceptionHandler {
                 .body(new ApiError(e.getMessage(), details, LocalDateTime.now().toString()));
     }
 
-    // Unused Credentials Handling
-
-    // @ExceptionHandler(BadCredentialsException.class)
-    // public ResponseEntity<?> handleBadCredentials(BadCredentialsException e) {}
-    // log.warn("Credenciales inválidas: {}", e.getMessage());
-    // return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-    // .body(new ApiError("Credenciales inválidas"));
-
-    // @ExceptionHandler(AccessDeniedException.class)
-    // public ResponseEntity<?> handleAccessDenied(AccessDeniedException e) {}
-    // log.warn("Acceso denegado: {}", e.getMessage());
-    // return ResponseEntity.status(HttpStatus.FORBIDDEN)
-    // .body(new ApiError("Acceso denegado"));
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleMessageNotReadable(HttpMessageNotReadableException e) {
+        log.warn("Invalid request body: {}", e.getMessage());
+        String details = isDevelopment() ? Arrays.toString(e.getStackTrace()) : null;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiError("Invalid request body", details, LocalDateTime.now().toString()));
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneric(Exception e) {
