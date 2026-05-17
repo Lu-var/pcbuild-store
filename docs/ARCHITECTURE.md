@@ -155,18 +155,20 @@ NotificationLog { Long id, Long userId, String type, String content, String stat
 
 | Origin | → | Destination | Reason | Method |
 |--------|---|-------------|--------|--------|
-| api-gateway | → | auth-service | Validate JWT tokens | RestClient |
-| auth-service | → | user-service | Link credentials to user profile | RestClient |
-| build-service | → | product-service | Get component technical info | Feign |
-| build-service | → | compatibility-service | Validate component compatibility | Feign |
-| build-service | → | provider-service | Query external references | Feign |
-| estimate-service | → | build-service | Get full build configuration | RestClient |
-| estimate-service | → | product-service | Get updated prices | RestClient |
-| estimate-service | → | notification-service | Notify user of estimate | RestClient |
-| hardware-advisor | → | build-service | Analyze current user build | Feign |
-| hardware-advisor | → | product-service | Get catalog for suggestions | Feign |
-| hardware-advisor | → | compatibility-service | Validate recommended components | Feign |
-| hardware-advisor | → | notification-service | Notify recommendations | Feign |
+| api-gateway | → | auth-service | Validate token | RestClient |
+| auth-service | → | user-service | Link user profile | RestClient |
+| compatibility-service | → | product-service | Get product specs | RestClient |
+| build-service | → | product-service | Get product info | Feign |
+| build-service | → | compatibility-service | Check compatibility | Feign |
+| build-service | → | provider-service | Get provider prices | Feign |
+| estimate-service | → | build-service | Get build | RestClient |
+| estimate-service | → | product-service | Get prices | RestClient |
+| estimate-service | → | notification-service | Send notification | RestClient |
+| product-service | → | category-service | Validate category | RestClient |
+| hardware-advisor | → | build-service | Get build | Feign |
+| hardware-advisor | → | product-service | Get products | Feign |
+| hardware-advisor | → | compatibility-service | Check compatibility | Feign |
+| hardware-advisor | → | notification-service | Send notification | Feign |
 
 ## Actors
 

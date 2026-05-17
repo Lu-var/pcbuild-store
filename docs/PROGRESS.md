@@ -93,7 +93,7 @@
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
-- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [x] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
 - [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
@@ -110,7 +110,7 @@
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
-- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [x] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
 - [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
@@ -125,11 +125,11 @@
 - [x] Seed data (32 products, ~100 attributes) (Module 2)
 - [x] `@OneToMany` Product -> ProductAttribute (Module 3)
 - [x] RestClient → category-service (Module 5)
-- [ ] Add to ARCHITECTURE.md inter-service table (product → category)
+- [x] Add to ARCHITECTURE.md inter-service table (product → category)
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
-- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [x] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
 - [ ] Refactor endpoint tests script (notification template)
 - [ ] Tests
 
@@ -143,7 +143,7 @@
 - [x] Exception handling (Module 1)
 - [x] Seed data (5 rules) (Module 2)
 - [ ] RestClient → product-service (Module 5)
-- [ ] Add to ARCHITECTURE.md inter-service table (compatibility → product)
+- [x] Add to ARCHITECTURE.md inter-service table (compatibility → product)
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
