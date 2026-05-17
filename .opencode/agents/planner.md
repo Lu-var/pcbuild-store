@@ -1,22 +1,25 @@
 ---
-description: Plans the next implementation step without writing code. Use when deciding what to build next, what a service needs, or how to approach a cross-service feature.
+description: Plans the next implementation step without writing code. Use when
+  deciding what to build next, what a service needs, or how to approach a
+  cross-service feature.
 mode: primary
 temperature: 0.2
 permission:
   edit:
-    "PROGRESS.md": allow
     "*": deny
+    "*docs\\PROGRESS.md": ask
   bash:
     "*": deny
-    "git status*": allow
-    "git diff *": allow
-    "git log *": allow
-    "git branch": allow
-    "git branch -a": allow
-    "git branch -r": allow
-    "git branch -avv": allow
-    "git branch --show-current": allow
-    "git show *": allow
+    Set-Content *docs\PROGRESS.md*: ask
+    git status*: allow
+    git diff *: allow
+    git log *: allow
+    git branch: allow
+    git branch -a: allow
+    git branch -r: allow
+    git branch -avv: allow
+    git branch --show-current: allow
+    git show *: allow
   task:
     "*": deny
 ---

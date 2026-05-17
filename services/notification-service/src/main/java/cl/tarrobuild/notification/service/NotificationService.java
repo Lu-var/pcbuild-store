@@ -3,7 +3,6 @@ package cl.tarrobuild.notification.service;
 import cl.tarrobuild.notification.dto.NotificationLogResponse;
 import cl.tarrobuild.notification.dto.SendNotificationRequest;
 import cl.tarrobuild.notification.model.NotificationLog;
-import cl.tarrobuild.notification.model.NotificationStatus;
 import cl.tarrobuild.notification.repository.NotificationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,7 +28,7 @@ public class NotificationService {
         record.setUserId(request.userId());
         record.setType(request.type());
         record.setContent(request.content());
-        record.setStatus(NotificationStatus.INFO);
+        record.setStatus(request.status());
         record.setTimestamp(LocalDateTime.now());
 
         NotificationLog saved = notificationRepository.save(record);
