@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -63,6 +64,14 @@ public class GlobalExceptionHandler {
         String details = isDevelopment() ? Arrays.toString(e.getStackTrace()) : null;
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new ApiError(e.getMessage(), details, LocalDateTime.now().toString()));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleMessageNotReadable(HttpMessageNotReadableException e) {
+        log.warn("Invalid request body: {}", e.getMessage());
+        String details = isDevelopment() ? Arrays.toString(e.getStackTrace()) : null;
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ApiError("Invalid request body", details, LocalDateTime.now().toString()));
     }
 
     @ExceptionHandler(Exception.class)

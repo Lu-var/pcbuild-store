@@ -58,6 +58,7 @@
 - [ ] Route proxying setup (Module 7)
 - [ ] Logging with `@Slf4j` (Module 8)
 - [ ] GlobalExceptionHandler (Module 9)
+- [ ] Endpoint tests script
 - [ ] Tests
 
 ### auth-service :8081
@@ -76,6 +77,7 @@
 - [ ] Flyway migrations (Module 6)
 - [ ] Logging with `@Slf4j` (Module 8)
 - [ ] GlobalExceptionHandler (Module 9)
+- [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
 ### user-service :8082
@@ -91,6 +93,8 @@
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
+- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
 ### category-service :8084
@@ -106,6 +110,8 @@
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
+- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
 ### product-service :8083
@@ -119,9 +125,12 @@
 - [x] Seed data (32 products, ~100 attributes) (Module 2)
 - [x] `@OneToMany` Product -> ProductAttribute (Module 3)
 - [x] RestClient → category-service (Module 5)
+- [ ] Add to ARCHITECTURE.md inter-service table (product → category)
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
+- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [ ] Refactor endpoint tests script (notification template)
 - [ ] Tests
 
 ### compatibility-service :8085
@@ -133,10 +142,13 @@
 - [x] Controller (Module 1)
 - [x] Exception handling (Module 1)
 - [x] Seed data (5 rules) (Module 2)
-- [ ] FeignClient → product-service (Module 5)
+- [ ] RestClient → product-service (Module 5)
+- [ ] Add to ARCHITECTURE.md inter-service table (compatibility → product)
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
+- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
 ### provider-service :8086
@@ -151,6 +163,8 @@
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
+- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
 ### build-service :8087
@@ -170,6 +184,8 @@
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
+- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
 ### estimate-service :8088
@@ -187,6 +203,8 @@
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
+- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
 ### hardware-advisor :8089
@@ -205,19 +223,23 @@
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
+- [ ] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [ ] Endpoint tests script (notification as template)
 - [ ] Tests
 
 ### notification-service :8090
 
 - [x] Model / Entity (NotificationLog) (Module 2)
-- [x] Repository (in-memory, pre-JPA) (Module 1)
+- [x] Repository (Module 2)
 - [x] DTOs (Request / Response) (Module 1)
 - [x] Service (Module 1)
 - [x] Controller (Module 1)
 - [x] Exception handling (Module 1)
-- [ ] Migrate to JPA + database (Module 2)
+- [x] Migrate to JPA + database (Module 2)
 - [ ] Seed data (Module 2)
 - [ ] Flyway migrations (Module 6)
 - [x] Logging with `@Slf4j` (Module 8)
 - [x] GlobalExceptionHandler (Module 9)
+- [x] Handle HttpMessageNotReadableException in GlobalExceptionHandler (invalid enums return 400)
+- [x] Endpoint tests script
 - [ ] Tests

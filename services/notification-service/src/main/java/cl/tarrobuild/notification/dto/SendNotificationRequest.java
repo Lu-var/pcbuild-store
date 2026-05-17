@@ -1,5 +1,6 @@
 package cl.tarrobuild.notification.dto;
 
+import cl.tarrobuild.notification.model.NotificationStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -11,5 +12,8 @@ public record SendNotificationRequest(
         String type,
 
         @NotBlank(message = "Content cannot be blank")
-        String content
+        String content,
+
+        @NotNull(message = "Status cannot be null")
+        NotificationStatus status
 ) {}
